@@ -1,0 +1,9 @@
+pandoc: 3.1.11
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  didintrjl: didintrjl.html
+last_built: 2025-11-30T15:20Z
+urls:
+  reference: https://ebjamieson97.github.io/didintrjl/reference
+  article: https://ebjamieson97.github.io/didintrjl/articles
