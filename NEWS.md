@@ -1,3 +1,3 @@
-# didintrjl (development version)
+# didintrjl 0.0.0.9000
 
-* Initial CRAN submission.
+* Initial package setup.
