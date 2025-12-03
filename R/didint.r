@@ -21,18 +21,19 @@
 #' Period grids for staggered adoption are constructed automatically,
 #' based on the inputted data. Otherwise, the period grid can be created
 #' manually using the arguments `freq`, `freq_multiplier`, `start_date`,
-#' and `end_date`.More information on this process can be seen on the didintrjl
+#' and `end_date`. More information on this process can be seen on the didintrjl
 #' documentation site: https://ebjamieson97.github.io/didintrjl/.
 #'
 #' @param outcome A string giving the column name of the outcome variable.
-#' @param state A string giving the column identifying states.
+#' @param state A string giving the column identifying states. The state column
+#'   should be a character column.
 #' @param time A string giving the column identifying dates.
 #' @param data A data frame containing the variables used for estimation.
 #'
 #' @param gvar String giving the column that indicates first treatment time for
 #'   each state. Use either this option or the combination of `treated_states`
 #'   and `treatment_times`.
-#' @param treated_states Specify the treated state(s).
+#' @param treated_states Character values specifying the treated state(s).
 #' @param treatment_times Specify the treated_states using strings, numbers,
 #'   or Dates, corresponding to `treated_states`.
 #'
@@ -65,7 +66,7 @@
 #'   randomization inference procedure.
 #' @param seed Integer seed for randomization inference.
 #' @param hc Heteroskedasticity-consistent covariance matrix estimator.
-#'   One of `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"` or numeric 0–4.
+#'   One of `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"`.
 #'
 #' @returns
 #' Results. ATT, p-values etc.
@@ -84,7 +85,7 @@
 #' *Randomization inference for difference-in-differences with few treated clusters*.
 #'   \doi{10.1016/j.jeconom.2020.04.024}
 #'
-#' @importFrom JuliaCall julia_setup
+#' @importFrom JuliaConnectoR juliaSetupOk juliaImport juliaEval
 #' @export
 didint <- function(
   outcome,
@@ -107,86 +108,225 @@ didint <- function(
   nperm = 999,
   verbose = TRUE,
   seed = sample.int(1000000, 1),
-  use_pre_controls = FALSE,
   notyet = NULL,
   hc = "hc3"
 ) {
 
-  # First, setup Julia in R using JuliaCall, set rebuild to TRUE to allow
-  julia <- JuliaCall::julia_setup()
-
-  # Then, if needed, install the DiDInt.jl Julia package
-  julia$install_package_if_needed("https://github.com/ebjamieson97/DiDInt.jl")
-
-  # Load the DiDInt.jl library
-  julia$library("DiDInt")
-
-  # Now, pass all the args to Julia
-  # Assign the data frame to Julia
-  julia$assign("data", data)
-
-  # Convert ref from R list to Julia Dict if provided
-  if (!is.null(ref)) {
-    julia$assign("ref", ref)
-    julia$command("begin
-    ref = Dict{String, String}(string(k) => v for (k, v) in ref)
-    end")
-  } else {
-    julia$assign("ref", NULL)
+  # Check JuliaSetupOK
+  if (!identical(JuliaConnectoR::juliaSetupOk(), TRUE)) {
+    stop(paste0("Could not connect to Julia using JuliaConnectoR.",
+                " JuliaConnectoR::juliaSetupOk() failed.",
+                "\nSee the JuliaConnectoR package for more details:",
+                " https://github.com/stefan-m-lenz/JuliaConnectoR"))
   }
 
-  # Assign all other arguments
-  julia$assign("outcome", outcome)
-  julia$assign("state", state)
-  julia$assign("time", time)
-  julia$assign("gvar", gvar)
-  julia$assign("treated_states", treated_states)
-  julia$assign("treatment_times", treatment_times)
-  julia$assign("date_format", date_format)
-  julia$assign("covariates", covariates)
-  julia$assign("ccc", ccc)
-  julia$assign("agg", agg)
-  julia$assign("weighting", weighting)
-  julia$assign("freq", freq)
-  julia$assign("freq_multiplier", freq_multiplier)
-  julia$assign("start_date", start_date)
-  julia$assign("end_date", end_date)
-  julia$assign("nperm", nperm)
-  julia$assign("verbose", verbose)
-  julia$assign("seed", seed)
-  julia$assign("use_pre_controls", use_pre_controls)
-  julia$assign("notyet", notyet)
-  julia$assign("hc", hc)
+  # Check that DiDINT exists
+  didint_exists <- JuliaConnectoR::juliaEval('
+                   using Pkg
+                   "DiDInt" in [pkg.name for pkg in values(Pkg.dependencies())]
+                   ')
+  if (!didint_exists) {
+    stop(paste0("Could not find the DiDInt.jl Julia package. Try running:\n",
+                "JuliaConnectoR::juliaEval('using Pkg;\n",
+                "Pkg.add(url=\"https://github.com/ebjamieson97/DiDInt.jl\")')"))
+  }
 
-  # And then call the DiDInt.didint() function
-  result <- julia$eval("begin
-    DiDInt.didint(
-      outcome,
-      state,
-      time,
-      data;
-      gvar = gvar,
-      treated_states = treated_states,
-      treatment_times = treatment_times,
-      date_format = date_format,
-      covariates = covariates,
-      ccc = ccc,
-      agg = agg,
-      weighting = weighting,
-      ref = ref,
-      freq = freq,
-      freq_multiplier = freq_multiplier,
+  # Import DiDInt
+  DiDInt <- JuliaConnectoR::juliaImport("DiDInt")
+  didintrjl <- DiDInt$didint
+
+  # Ensure that the state column and treated_states are strings
+  data[, state] <- as.character(data[, state])
+  treated_states <- as.character(treated_states)
+
+  # Run the function and convert to R dataframe
+  result <- didintrjl(outcome,
+                      state,
+                      time,
+                      data,
+                      gvar = gvar,
+                      treated_states = treated_states,
+                      treatment_times = treatment_times,
+                      date_format = date_format,
+                      covariates = covariates,
+                      ccc = ccc,
+                      agg = agg,
+                      weighting = weighting,
+                      ref = ref,
+                      freq = freq,
+                      freq_multiplier = freq_multiplier,
+                      start_date = start_date,
+                      end_date = end_date,
+                      nperm = nperm,
+                      verbose = verbose,
+                      seed = seed,
+                      notyet = notyet,
+                      hc = hc,
+                      wrapper = "r")
+  result <- as.data.frame(result)
+
+  # Rename any of the sub-aggregate att columns for ease of conversion
+  cols <- names(result)
+  prefixes <- c("att_", "se_att_", "pval_att_",
+                "jknifese_att_", "jknifepval_att_", "ri_pval_att_")
+  for (prefix in prefixes) {
+    matching_cols <- grep(paste0("^", prefix), cols, value = TRUE)
+    for (old_name in matching_cols) {
+      new_name <- paste0(prefix, "sub")
+      names(result)[names(result) == old_name] <- new_name
+    }
+  }
+
+  result <- create_didint_object(result, ccc, weighting, agg)
+  return(result)
+
+}
+
+
+#' @title DiDIntObj
+#'
+#' @description Objects of this class store all of the results for a given
+#' set of aggregation, weighting, and ccc options.
+#'
+#' @param result DataFrame of results from DiDInt.jl
+#' @param ccc The specified CCC variation of DID-INT that was used.
+#' @param weighting The weighting method that was used.
+#' @param agg The aggregation method that was used.
+#' @return DiDIntObj with class "DiDIntObj"
+#' @export
+create_didint_object <- function(result, ccc, weighting, agg) {
+
+  # Check if sub-aggregate results were produced
+  has_sub <- "att_sub" %in% names(result)
+
+  # Extract consistent data
+  period <- result$period[1]
+  start_date <- result$start_date[1]
+  end_date <- result$end_date[1]
+  nperm <- result$nperm[1]
+
+  # Determine grouping variable
+  group_label <- NULL
+  if (agg == "sgt") {
+    group_label <- paste0(result$state, ": ", result$gvar, ";", result$t)
+    group_title <- "State: gvar;time"
+  } else if (agg == "simple") {
+    group_label <- paste0(result$gvar, ";", result$time)
+    group_title <- "gvar;time"
+  } else if (agg == "time") {
+    group_label <- result$periods_post_treat
+    group_title <- "Periods Post Treatment"
+  } else if (agg == "cohort") {
+    group_label <- result$treatment_time
+    group_title <- "Treatment Time"
+  } else if (agg == "state") {
+    group_label <- result$state
+    group_title <- "State"
+  }
+
+  # Determine model type
+  if (ccc == "state") {
+    model_type <- "State-varying DID-INT"
+  } else if (ccc == "time") {
+    model_type <- "Time-varying DID-INT"
+  } else if (ccc == "int") {
+    model_type <- "Two-way DID-INT"
+  } else if (ccc == "add") {
+    model_type <- "Two one-way DID-INT"
+  } else if (ccc == "hom") {
+    model_type <- "Homogeneous DID-INT"
+  }
+
+  # Create aggregate results dataframe
+  agg_df <- data.frame(
+    att = result$agg_att[1],
+    se = result$se_agg_att[1],
+    pval = result$pval_agg_att[1],
+    ri_pval = result$ri_pval_agg_att[1],
+    jknife_se = result$jknifese_agg_att[1],
+    jknife_pval = result$jknifepval_agg_att[1]
+  )
+
+  # Create sub-aggregate results dataframe if available
+  sub_df <- NULL
+  if (has_sub && !is.null(group_label)) {
+    sub_df <- data.frame(
+      group = group_label,
+      att = result$att_sub,
+      se = result$se_att_sub,
+      pval = result$pval_att_sub,
+      ri_pval = result$ri_pval_att_sub,
+      jknife_se = result$jknifese_att_sub,
+      jknife_pval = result$jknifepval_att_sub,
+      weights = result$weights,
+      stringsAsFactors = FALSE
+    )
+    names(sub_df)[1] <- group_title
+  }
+
+  # Create object
+  out <- list(
+    agg = agg_df,
+    sub = sub_df,
+
+    specs = list(
+      period = period,
       start_date = start_date,
       end_date = end_date,
       nperm = nperm,
-      verbose = verbose,
-      seed = seed,
-      use_pre_controls = use_pre_controls,
-      notyet = notyet,
-      hc = hc
-    )
-  end")
+      ccc = ccc,
+      weighting = weighting,
+      agg = agg,
+      model_type = model_type
+    ),
 
-  return(result)
+    full_results = result
+  )
 
+  class(out) <- "DiDIntObj"
+  return(out)
+}
+
+#' @title Print method for \code{DiDIntObj}
+#'
+#' @param x A \code{DiDIntObj} object
+#' @param level Specify either `"agg"` or `"sub"` to view the aggregate
+#'   or sub-aggregate results.
+#' @param ... other arguments
+#' @export
+print.DiDIntObj <- function(x, level = c("agg", "sub"), ...) {
+  level <- match.arg(level)
+
+  cat("\n")
+  cat(sprintf("  Model Specification: %s\n", x$specs$model_type))
+  cat(sprintf("  Aggregation: %s\n\n", x$specs$agg))
+
+  if (level == "agg") {
+    cat(sprintf("  Aggregate ATT:  %.4f\n", x$agg$att[1]))
+
+    if (!is.null(x$sub)) {
+      cat(
+        sprintf(
+          "\n(%d sub-aggregate estimates available via print(., level='sub'))\n",
+          nrow(x$sub)
+        )
+      )
+    }
+  } else {
+    if (is.null(x$sub)) {
+      cat("No sub-aggregate estimates available.\n")
+    } else {
+      cat("Sub-Aggregate ATTs:\n")
+      cat("-------------------\n")
+      sub_print <- data.frame(
+        Group = x$sub[[1]],
+        ATT = sprintf("%.4f", x$sub$att),
+        stringsAsFactors = FALSE
+      )
+      names(sub_print)[1] <- names(x$sub)[1]
+      print(sub_print, row.names = FALSE, right = TRUE)
+    }
+  }
+
+  invisible(x)
 }

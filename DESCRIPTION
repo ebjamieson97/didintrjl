@@ -1,6 +1,6 @@
 Package: didintrjl
 Title: Intersection Difference-in-Differences
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     person("Eric", "Jamieson", email = "ericbrucejamieson@gmail.com", role = c("aut", "cre", "cph"))
 Description: A wrapper for the Julia package 'DiDInt.jl' <https://ebjamieson97.github.io/DiDInt.jl/dev/>
@@ -24,3 +24,5 @@ Suggests:
 VignetteBuilder: knitr
 URL: https://ebjamieson97.github.io/didintrjl/, https://github.com/ebjamieson97/undidR
 Config/testthat/edition: 3
+Imports: 
+    JuliaConnectoR

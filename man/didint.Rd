@@ -25,7 +25,6 @@ didint(
   nperm = 999,
   verbose = TRUE,
   seed = sample.int(1e+06, 1),
-  use_pre_controls = FALSE,
   notyet = NULL,
   hc = "hc3"
 )
@@ -33,7 +32,8 @@ didint(
 \arguments{
 \item{outcome}{A string giving the column name of the outcome variable.}
 
-\item{state}{A string giving the column identifying states.}
+\item{state}{A string giving the column identifying states. The state column
+should be a character column.}
 
 \item{time}{A string giving the column identifying dates.}
 
@@ -43,7 +43,7 @@ didint(
 each state. Use either this option or the combination of \code{treated_states}
 and \code{treatment_times}.}
 
-\item{treated_states}{Specify the treated state(s).}
+\item{treated_states}{Character values specifying the treated state(s).}
 
 \item{treatment_times}{Specify the treated_states using strings, numbers,
 or Dates, corresponding to \code{treated_states}.}
@@ -89,7 +89,7 @@ randomization inference procedure.}
 treated states as controls.}
 
 \item{hc}{Heteroskedasticity-consistent covariance matrix estimator.
-One of \code{"hc0"}, \code{"hc1"}, \code{"hc2"}, \code{"hc3"}, \code{"hc4"} or numeric 0–4.}
+One of \code{"hc0"}, \code{"hc1"}, \code{"hc2"}, \code{"hc3"}, \code{"hc4"}.}
 }
 \value{
 Results. ATT, p-values etc.
@@ -116,7 +116,7 @@ specified via the \code{date_format} argument (e.g. \code{"yyyy-mm-dd"}).
 Period grids for staggered adoption are constructed automatically,
 based on the inputted data. Otherwise, the period grid can be created
 manually using the arguments \code{freq}, \code{freq_multiplier}, \code{start_date},
-and \code{end_date}.More information on this process can be seen on the didintrjl
+and \code{end_date}. More information on this process can be seen on the didintrjl
 documentation site: https://ebjamieson97.github.io/didintrjl/.
 }
 \examples{
