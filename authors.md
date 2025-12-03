@@ -10,13 +10,12 @@ Source:
 [`DESCRIPTION`](https://github.com/ebjamieson97/didintrjl/blob/main/DESCRIPTION)
 
 Jamieson E (2025). *didintrjl: Intersection Difference-in-Differences*.
-R package version 0.0.0.9000,
-<https://ebjamieson97.github.io/didintrjl/>.
+R package version 0.0.1, <https://ebjamieson97.github.io/didintrjl/>.
 
     @Manual{,
       title = {didintrjl: Intersection Difference-in-Differences},
       author = {Eric Jamieson},
       year = {2025},
-      note = {R package version 0.0.0.9000},
+      note = {R package version 0.0.1},
       url = {https://ebjamieson97.github.io/didintrjl/},
     }
