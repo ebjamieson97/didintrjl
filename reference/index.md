@@ -2,6 +2,11 @@
 
 ## All functions
 
+- [`coef(`*`<DiDIntObj>`*`)`](https://ebjamieson97.github.io/didintrjl/reference/coef.DiDIntObj.md)
+  :
+
+  Extract coefficients from `DiDIntObj`
+
 - [`create_didint_object()`](https://ebjamieson97.github.io/didintrjl/reference/create_didint_object.md)
   : DiDIntObj
 
@@ -12,3 +17,8 @@
   :
 
   Print method for `DiDIntObj`
+
+- [`summary(`*`<DiDIntObj>`*`)`](https://ebjamieson97.github.io/didintrjl/reference/summary.DiDIntObj.md)
+  :
+
+  Summary method for `DiDIntObj`

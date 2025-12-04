@@ -1,5 +1,11 @@
 # Changelog
 
+## didintrjl 0.0.2
+
+- Added [`coef()`](https://rdrr.io/r/stats/coef.html) and
+  [`summary()`](https://rdrr.io/r/base/summary.html) methods to
+  `DiDIntObj`.
+
 ## didintrjl 0.0.1
 
 - Switched from using JuliaCall to now using JuliaConnectoR.

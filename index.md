@@ -21,48 +21,60 @@ remotes::install_github("ebjamieson97/didintrjl")
 
 ## Examples
 
+The
+[`didint()`](https://ebjamieson97.github.io/didintrjl/reference/didint.md)
+function returns an object with the class `DiDIntObj` which has three S3
+methods: [`print()`](https://rdrr.io/r/base/print.html),
+[`summary()`](https://rdrr.io/r/base/summary.html), and
+[`coef()`](https://rdrr.io/r/stats/coef.html). Each of these methods
+have the argument `level` which can take either `"agg"` or `"sub"` in
+order to distinguish between aggregate results and sub-aggregate
+results. For example, in a staggered adoption setting with several
+different treatment times, setting `level = "sub"` will return
+information pertinent to the distinct treatment times, whereas
+`level = "agg"` would return the aggregated results.
+
 ``` r
 # Load data
 df <- read.csv("inst/extdata/merit.csv")
 
 # Load didintrjl and run didint()
 library(didintrjl)
-res <- didint("coll", "state", "year", df,
+res <- didint("coll", "state", "year", df, verbose = FALSE,
               treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88),
               treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
 #> Starting Julia ...
-#> Completed 100 of 999 permutations
-#> Completed 200 of 999 permutations
-#> Completed 300 of 999 permutations
-#> Completed 400 of 999 permutations
-#> Completed 500 of 999 permutations
-#> Completed 600 of 999 permutations
-#> Completed 700 of 999 permutations
-#> Completed 800 of 999 permutations
-#> Completed 900 of 999 permutations
 
 # Print aggregate and then sub-aggregate results
-print(res)
+summary(res)
 #> 
 #>   Model Specification: Two-way DID-INT
+#>   Weighting: both
 #>   Aggregation: cohort
+#>   Period Length: 1 year
+#>   First Period: 1989
+#>   Last Period: 2000
+#>   Permutations: 999
 #> 
-#>   Aggregate ATT:  0.0458
-#> 
-#> (7 sub-aggregate estimates available via print(., level='sub'))
-print(res, level = "sub")
+#>         ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value
+#>  0.04582252 0.01440005 0.01902511  0.1091091   0.01333186         0.0138506
+summary(res, level = "sub")
 #> 
 #>   Model Specification: Two-way DID-INT
+#>   Weighting: both
 #>   Aggregation: cohort
+#>   Period Length: 1 year
+#>   First Period: 1989
+#>   Last Period: 2000
+#>   Permutations: 999
 #> 
-#> Sub-Aggregate ATTs:
-#> -------------------
-#>  Treatment Time     ATT
-#>      1991-01-01  0.0529
-#>      1993-01-01  0.0236
-#>      1996-01-01  0.0564
-#>      1997-01-01  0.0711
-#>      1998-01-01  0.0485
-#>      1999-01-01  0.0120
-#>      2000-01-01 -0.0331
+#> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
+#> -------------------------------------------------------------------------------------------------------------- 
+#> 1991-01-01               0.0529     0.0244     0.0307     0.5075     0.0244     0.0305     0.2018
+#> 1993-01-01               0.0236     0.0186     0.2044     0.6717     0.0185     0.2037     0.1915
+#> 1996-01-01               0.0564     0.0295     0.0572     0.4645     0.0294     0.0566     0.0757
+#> 1997-01-01               0.0711     0.0271     0.0094     0.2252     0.0270     0.0092     0.3211
+#> 1998-01-01               0.0485     0.0389     0.2146     0.4795     0.0388     0.2128     0.1086
+#> 1999-01-01               0.0120     0.0207     0.5629     0.8719     0.0206     0.5606     0.0355
+#> 2000-01-01              -0.0331     0.0976     0.7364     0.6887     0.0964     0.7334     0.0658
 ```
