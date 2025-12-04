@@ -37,17 +37,23 @@ remotes::install_github("ebjamieson97/didintrjl")
 
 ## Examples
 
+The `didint()` function returns an object with the class `DiDIntObj` which has three S3 methods: `print()`, `summary()`, and `coef()`. Each of these methods
+have the argument `level` which can take either `"agg"` or `"sub"` in order to distinguish between aggregate results and sub-aggregate results. For example,
+in a staggered adoption setting with several different treatment times, setting `level = "sub"` will return information pertinent to the distinct treatment times, whereas
+`level = "agg"` would return the aggregated results.
+
 ```{r}
 # Load data
 df <- read.csv("inst/extdata/merit.csv")
 
 # Load didintrjl and run didint()
 library(didintrjl)
-res <- didint("coll", "state", "year", df,
+res <- didint("coll", "state", "year", df, verbose = FALSE,
               treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88),
               treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
 
 # Print aggregate and then sub-aggregate results
-print(res)
-print(res, level = "sub")
+summary(res)
+summary(res, level = "sub")
 ```
+

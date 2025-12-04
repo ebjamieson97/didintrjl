@@ -199,6 +199,10 @@ create_didint_object <- function(result, ccc, weighting, agg) {
   # Check if sub-aggregate results were produced
   has_sub <- "att_sub" %in% names(result)
 
+  if (!has_sub) {
+    agg <- "none"
+  }
+
   # Extract consistent data
   period <- result$period[1]
   start_date <- result$start_date[1]
@@ -207,6 +211,7 @@ create_didint_object <- function(result, ccc, weighting, agg) {
 
   # Determine grouping variable
   group_label <- NULL
+  group_title <- NULL
   if (agg == "sgt") {
     group_label <- paste0(result$state, ": ", result$gvar, ";", result$t)
     group_title <- "State: gvar;time"
@@ -261,7 +266,6 @@ create_didint_object <- function(result, ccc, weighting, agg) {
       weights = result$weights,
       stringsAsFactors = FALSE
     )
-    names(sub_df)[1] <- group_title
   }
 
   # Create object
@@ -280,7 +284,7 @@ create_didint_object <- function(result, ccc, weighting, agg) {
       model_type = model_type
     ),
 
-    full_results = result
+    group_title = group_title
   )
 
   class(out) <- "DiDIntObj"
@@ -323,10 +327,91 @@ print.DiDIntObj <- function(x, level = c("agg", "sub"), ...) {
         ATT = sprintf("%.4f", x$sub$att),
         stringsAsFactors = FALSE
       )
-      names(sub_print)[1] <- names(x$sub)[1]
+      names(sub_print)[1] <- x$group_title
       print(sub_print, row.names = FALSE, right = TRUE)
     }
   }
 
   invisible(x)
+}
+
+#' @title Summary method for \code{DiDIntObj}
+#'
+#' @param object A \code{DiDIntObj} object
+#' @param level Specify either `"agg"` or `"sub"` to view the aggregate
+#'   or sub-aggregate results.
+#' @param ... other arguments
+#' @export
+summary.DiDIntObj <- function(object, level  = c("agg", "sub"), ...) {
+
+  level <- match.arg(level)
+  cat("\n")
+  cat(sprintf("  Model Specification: %s\n", object$specs$model_type))
+  cat(sprintf("  Weighting: %s\n", object$specs$weighting))
+  cat(sprintf("  Aggregation: %s\n", object$specs$agg))
+  cat(sprintf("  Period Length: %s\n", object$specs$period))
+  cat(sprintf("  First Period: %s\n", object$specs$start_date))
+  cat(sprintf("  Last Period: %s\n", object$specs$end_date))
+  cat(sprintf("  Permutations: %d\n\n", object$specs$nperm))
+
+  if (level == "agg") {
+    agg_display <- object$agg
+    names(agg_display) <- c("ATT", "Std. Error", "p-value",
+                            "RI p-value", "Jackknife SE", "Jackknife p-value")
+    print(agg_display, row.names = FALSE, right = TRUE)
+  } else {
+    if (is.null(object$sub)) {
+      cat("No sub-aggregate estimates available.\n")
+    } else {
+
+      # Print header
+      cat(sprintf("%-20s %10s %10s %10s %10s %10s %10s %10s\n",
+                  object$group_title, "ATT", "SE", "p-value",
+                  "RI p-val", "JK SE", "JK p-val", "Weight"))
+      cat(strrep("-", 110), "\n")
+
+      # Print out sub-agg results
+      for (i in seq_len(nrow(object$sub))) {
+        cat(sprintf("%-20s %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f %10.4f\n",
+                    object$sub[[1]][i],
+                    object$sub$att[i],
+                    object$sub$se[i],
+                    object$sub$pval[i],
+                    object$sub$ri_pval[i],
+                    object$sub$jknife_se[i],
+                    object$sub$jknife_pval[i],
+                    object$sub$weights[i]))
+      }
+    }
+  }
+
+  invisible(object)
+}
+
+#' @title Extract coefficients from \code{DiDIntObj}
+#'
+#' @param object A \code{DiDIntObj} object
+#' @param level Specify either `"agg"` or `"sub"` to view the aggregate
+#'   or sub-aggregate results.
+#' @param ... other arguments
+#' @return A data frame of coefficient estimates
+#' @export
+coef.DiDIntObj <- function(object, level = c("agg", "sub"), ...) {
+
+  level <- match.arg(level)
+
+  if (level == "agg") {
+
+    return(object$agg$att)
+
+  } else {
+    if (is.null(object$sub)) {
+      cat("No sub-aggregate estimates available.\n")
+      return(NULL)
+    } else {
+      return(data.frame(Group = object$sub[[1]],
+                        ATT = object$sub$att))
+    }
+  }
+
 }
