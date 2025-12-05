@@ -1,3 +1,7 @@
+# didintrjl 0.0.3
+
+* Added `didint_plot()` function and updated the `summary()` method for `DiDIntObj`.
+
 # didintrjl 0.0.2
 
 * Added `coef()` and `summary()` methods to `DiDIntObj`.

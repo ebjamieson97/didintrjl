@@ -4,13 +4,14 @@
 \alias{summary.DiDIntObj}
 \title{Summary method for \code{DiDIntObj}}
 \usage{
-\method{summary}{DiDIntObj}(object, level = c("agg", "sub"), ...)
+\method{summary}{DiDIntObj}(object, level = c("all", "agg", "sub"), ...)
 }
 \arguments{
 \item{object}{A \code{DiDIntObj} object}
 
-\item{level}{Specify either \code{"agg"} or \code{"sub"} to view the aggregate
-or sub-aggregate results.}
+\item{level}{Specify either \code{"agg"}, \code{"sub"}, or \code{"all"}, to view the
+results at the aggregate level, the sub-aggregate level, or to view
+both simultaneously.}
 
 \item{...}{other arguments}
 }

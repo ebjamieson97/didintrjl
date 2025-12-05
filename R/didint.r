@@ -69,7 +69,7 @@
 #'   One of `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"`.
 #'
 #' @returns
-#' Results. ATT, p-values etc.
+#' A DiDIntObj
 #'
 #' @examples
 #' file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
@@ -112,27 +112,8 @@ didint <- function(
   hc = "hc3"
 ) {
 
-  # Check JuliaSetupOK
-  if (!identical(JuliaConnectoR::juliaSetupOk(), TRUE)) {
-    stop(paste0("Could not connect to Julia using JuliaConnectoR.",
-                " JuliaConnectoR::juliaSetupOk() failed.",
-                "\nSee the JuliaConnectoR package for more details:",
-                " https://github.com/stefan-m-lenz/JuliaConnectoR"))
-  }
-
-  # Check that DiDINT exists
-  didint_exists <- JuliaConnectoR::juliaEval('
-                   using Pkg
-                   "DiDInt" in [pkg.name for pkg in values(Pkg.dependencies())]
-                   ')
-  if (!didint_exists) {
-    stop(paste0("Could not find the DiDInt.jl Julia package. Try running:\n",
-                "JuliaConnectoR::juliaEval('using Pkg;\n",
-                "Pkg.add(url=\"https://github.com/ebjamieson97/DiDInt.jl\")')"))
-  }
-
   # Import DiDInt
-  DiDInt <- JuliaConnectoR::juliaImport("DiDInt")
+  DiDInt <- .didintrjl_setup()
   didintrjl <- DiDInt$didint
 
   # Ensure that the state column and treated_states are strings
@@ -338,13 +319,17 @@ print.DiDIntObj <- function(x, level = c("agg", "sub"), ...) {
 #' @title Summary method for \code{DiDIntObj}
 #'
 #' @param object A \code{DiDIntObj} object
-#' @param level Specify either `"agg"` or `"sub"` to view the aggregate
-#'   or sub-aggregate results.
+#' @param level Specify either `"agg"`, `"sub"`, or `"all"`, to view the
+#'   results at the aggregate level, the sub-aggregate level, or to view
+#'   both simultaneously.
 #' @param ... other arguments
 #' @export
-summary.DiDIntObj <- function(object, level  = c("agg", "sub"), ...) {
+summary.DiDIntObj <- function(object, level  = c("all", "agg", "sub"), ...) {
 
   level <- match.arg(level)
+  if (level == "all") {
+    level <- c("agg", "sub")
+  }
   cat("\n")
   cat(sprintf("  Model Specification: %s\n", object$specs$model_type))
   cat(sprintf("  Weighting: %s\n", object$specs$weighting))
@@ -354,16 +339,20 @@ summary.DiDIntObj <- function(object, level  = c("agg", "sub"), ...) {
   cat(sprintf("  Last Period: %s\n", object$specs$end_date))
   cat(sprintf("  Permutations: %d\n\n", object$specs$nperm))
 
-  if (level == "agg") {
+  if ("agg" %in% level) {
     agg_display <- object$agg
     names(agg_display) <- c("ATT", "Std. Error", "p-value",
                             "RI p-value", "Jackknife SE", "Jackknife p-value")
+    cat("Aggregate Results:\n")
     print(agg_display, row.names = FALSE, right = TRUE)
-  } else {
+    cat("\n")
+  }
+  if ("sub" %in% level) {
     if (is.null(object$sub)) {
       cat("No sub-aggregate estimates available.\n")
     } else {
 
+      cat("Subaggregate Results:\n")
       # Print header
       cat(sprintf("%-20s %10s %10s %10s %10s %10s %10s %10s\n",
                   object$group_title, "ATT", "SE", "p-value",

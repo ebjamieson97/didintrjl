@@ -37,6 +37,7 @@ remotes::install_github("ebjamieson97/didintrjl")
 
 ## Examples
 
+### `didint()`
 The `didint()` function returns an object with the class `DiDIntObj` which has three S3 methods: `print()`, `summary()`, and `coef()`. Each of these methods
 have the argument `level` which can take either `"agg"` or `"sub"` in order to distinguish between aggregate results and sub-aggregate results. For example,
 in a staggered adoption setting with several different treatment times, setting `level = "sub"` will return information pertinent to the distinct treatment times, whereas
@@ -52,8 +53,21 @@ res <- didint("coll", "state", "year", df, verbose = FALSE,
               treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88),
               treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
 
-# Print aggregate and then sub-aggregate results
+# Show summary of results
 summary(res)
-summary(res, level = "sub")
+
+# The aggregate and sub-aggregate results can also be accessed via
+res$agg
+res$sub
+```
+
+### `didint_plot()`
+
+```{r}
+# This will make plots soon, right now it just returns data
+res_plot <- didint_plot("coll", "state", "year", df,
+              treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000),
+              covariates = c("asian", "black", "male"))
+head(res_plot)
 ```
 
