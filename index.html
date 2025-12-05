@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">didintrjl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,6 +68,10 @@
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
 </h2>
+<div class="section level3">
+<h3 id="didint">
+<code>didint()</code><a class="anchor" aria-label="anchor" href="#didint"></a>
+</h3>
 <p>The <code><a href="reference/didint.html">didint()</a></code> function returns an object with the class <code>DiDIntObj</code> which has three S3 methods: <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>, <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, and <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>. Each of these methods have the argument <code>level</code> which can take either <code>"agg"</code> or <code>"sub"</code> in order to distinguish between aggregate results and sub-aggregate results. For example, in a staggered adoption setting with several different treatment times, setting <code>level = "sub"</code> will return information pertinent to the distinct treatment times, whereas <code>level = "agg"</code> would return the aggregated results.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load data</span></span>
@@ -80,7 +84,7 @@
 <span>              treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">1996</span>, <span class="fl">1997</span>, <span class="fl">1997</span>, <span class="fl">1998</span>, <span class="fl">1998</span>, <span class="fl">1999</span>, <span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Starting Julia ...</span></span>
 <span></span>
-<span><span class="co"># Print aggregate and then sub-aggregate results</span></span>
+<span><span class="co"># Show summary of results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Model Specification: Two-way DID-INT</span></span>
@@ -91,27 +95,61 @@
 <span><span class="co">#&gt;   Last Period: 2000</span></span>
 <span><span class="co">#&gt;   Permutations: 999</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Aggregate Results:</span></span>
 <span><span class="co">#&gt;         ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value</span></span>
-<span><span class="co">#&gt;  0.04582252 0.01440005 0.01902511  0.1091091   0.01333186         0.0138506</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span>, level <span class="op">=</span> <span class="st">"sub"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  0.04582252 0.01440005 0.01902511  0.1071071   0.01333186         0.0138506</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Model Specification: Two-way DID-INT</span></span>
-<span><span class="co">#&gt;   Weighting: both</span></span>
-<span><span class="co">#&gt;   Aggregation: cohort</span></span>
-<span><span class="co">#&gt;   Period Length: 1 year</span></span>
-<span><span class="co">#&gt;   First Period: 1989</span></span>
-<span><span class="co">#&gt;   Last Period: 2000</span></span>
-<span><span class="co">#&gt;   Permutations: 999</span></span>
-<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Subaggregate Results:</span></span>
 <span><span class="co">#&gt; Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------- </span></span>
-<span><span class="co">#&gt; 1991-01-01               0.0529     0.0244     0.0307     0.5075     0.0244     0.0305     0.2018</span></span>
-<span><span class="co">#&gt; 1993-01-01               0.0236     0.0186     0.2044     0.6717     0.0185     0.2037     0.1915</span></span>
-<span><span class="co">#&gt; 1996-01-01               0.0564     0.0295     0.0572     0.4645     0.0294     0.0566     0.0757</span></span>
-<span><span class="co">#&gt; 1997-01-01               0.0711     0.0271     0.0094     0.2252     0.0270     0.0092     0.3211</span></span>
-<span><span class="co">#&gt; 1998-01-01               0.0485     0.0389     0.2146     0.4795     0.0388     0.2128     0.1086</span></span>
-<span><span class="co">#&gt; 1999-01-01               0.0120     0.0207     0.5629     0.8719     0.0206     0.5606     0.0355</span></span>
-<span><span class="co">#&gt; 2000-01-01              -0.0331     0.0976     0.7364     0.6887     0.0964     0.7334     0.0658</span></span></code></pre></div>
+<span><span class="co">#&gt; 1991-01-01               0.0529     0.0244     0.0307     0.5175     0.0244     0.0305     0.2018</span></span>
+<span><span class="co">#&gt; 1993-01-01               0.0236     0.0186     0.2044     0.6967     0.0185     0.2037     0.1915</span></span>
+<span><span class="co">#&gt; 1996-01-01               0.0564     0.0295     0.0572     0.4585     0.0294     0.0566     0.0757</span></span>
+<span><span class="co">#&gt; 1997-01-01               0.0711     0.0271     0.0094     0.2052     0.0270     0.0092     0.3211</span></span>
+<span><span class="co">#&gt; 1998-01-01               0.0485     0.0389     0.2146     0.4725     0.0388     0.2128     0.1086</span></span>
+<span><span class="co">#&gt; 1999-01-01               0.0120     0.0207     0.5629     0.8619     0.0206     0.5606     0.0355</span></span>
+<span><span class="co">#&gt; 2000-01-01              -0.0331     0.0976     0.7364     0.7267     0.0964     0.7334     0.0658</span></span>
+<span></span>
+<span><span class="co"># The aggregate and sub-aggregate results can also be accessed via</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">agg</span></span>
+<span><span class="co">#&gt;          att         se       pval   ri_pval  jknife_se jknife_pval</span></span>
+<span><span class="co">#&gt; 1 0.04582252 0.01440005 0.01902511 0.1071071 0.01333186   0.0138506</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">sub</span></span>
+<span><span class="co">#&gt;        group         att         se        pval   ri_pval  jknife_se</span></span>
+<span><span class="co">#&gt; 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.5175175 0.02436901</span></span>
+<span><span class="co">#&gt; 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6966967 0.01852420</span></span>
+<span><span class="co">#&gt; 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4584585 0.02943824</span></span>
+<span><span class="co">#&gt; 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2052052 0.02697389</span></span>
+<span><span class="co">#&gt; 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4724725 0.03876762</span></span>
+<span><span class="co">#&gt; 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8618619 0.02061105</span></span>
+<span><span class="co">#&gt; 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.7267267 0.09642295</span></span>
+<span><span class="co">#&gt;   jknife_pval    weights</span></span>
+<span><span class="co">#&gt; 1 0.030478102 0.20179564</span></span>
+<span><span class="co">#&gt; 2 0.203684129 0.19153484</span></span>
+<span><span class="co">#&gt; 3 0.056599508 0.07567336</span></span>
+<span><span class="co">#&gt; 4 0.009152352 0.32107738</span></span>
+<span><span class="co">#&gt; 5 0.212809403 0.10859342</span></span>
+<span><span class="co">#&gt; 6 0.560591878 0.03548525</span></span>
+<span><span class="co">#&gt; 7 0.733434003 0.06584010</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="didint_plot">
+<code>didint_plot()</code><a class="anchor" aria-label="anchor" href="#didint_plot"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># This will make plots soon, right now it just returns data</span></span>
+<span><span class="va">res_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/didint_plot.html">didint_plot</a></span><span class="op">(</span><span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df</span>,</span>
+<span>              treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">1996</span>, <span class="fl">1997</span>, <span class="fl">1997</span>, <span class="fl">1998</span>, <span class="fl">1998</span>, <span class="fl">1999</span>, <span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span>,</span>
+<span>              covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_plot</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   state time    lambda ccc period start_date treat_period period_length</span></span>
+<span><span class="co">#&gt; 1    11 1989 0.4678955 hom      0       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 2    11 1990 0.3169124 hom      1       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 3    11 1991 0.4459362 hom      2       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 4    11 1992 0.5799970 hom      3       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 5    11 1993 0.6327476 hom      4       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 6    11 1994 0.4142140 hom      5       1989           NA        1 year</span></span></code></pre></div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

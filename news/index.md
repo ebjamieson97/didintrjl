@@ -1,5 +1,13 @@
 # Changelog
 
+## didintrjl 0.0.3
+
+- Added
+  [`didint_plot()`](https://ebjamieson97.github.io/didintrjl/reference/didint_plot.md)
+  function and updated the
+  [`summary()`](https://rdrr.io/r/base/summary.html) method for
+  `DiDIntObj`.
+
 ## didintrjl 0.0.2
 
 - Added [`coef()`](https://rdrr.io/r/stats/coef.html) and

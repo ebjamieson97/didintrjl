@@ -1,17 +1,16 @@
-# Estimate the ATT using DID-INT
+# Make event study or parallel trends plots
 
-`didint()` estimates the average effect of treatment on the treated
-(ATT) using intersection difference-in-differences developped by Karim &
-Webb (2025). The method adjusts for covariates that may vary across
-states, over time, or jointly by state and time. This function is an R
-wrapper around the Julia implementation provided in the Didint.jl
-package. For all the details visit the didintrjl documentation site:
-https://ebjamieson97.github.io/didintrjl/.
+`didint_plot()` produces either event study plots or parallel trends
+plots depending on what is specified via the `event` argument. The
+parallel trends plots, as well as the event study plots, are created
+using the means residualized by covariates under different model
+specifications that account for different violations of the common
+causal covaraites (CCC) assumptions.
 
 ## Usage
 
 ``` r
-didint(
+didint_plot(
   outcome,
   state,
   time,
@@ -21,18 +20,15 @@ didint(
   treatment_times = NULL,
   date_format = NULL,
   covariates = NULL,
-  ccc = "int",
-  agg = "cohort",
-  weighting = "both",
   ref = NULL,
+  ccc = "all",
+  event = FALSE,
+  weights = TRUE,
+  ci = 0.95,
   freq = NULL,
   freq_multiplier = 1,
   start_date = NULL,
   end_date = NULL,
-  nperm = 999,
-  verbose = TRUE,
-  seed = sample.int(1e+06, 1),
-  notyet = NULL,
   hc = "hc3"
 )
 ```
@@ -82,25 +78,32 @@ didint(
 
   Optional string or vector of strings specifying covariates to include.
 
+- ref:
+
+  Optional named list indicating the reference category for categorical
+  covariates.
+
 - ccc:
 
   A string specifying the DID-INT specification. One of `"hom"`,
   `"time"`, `"state"`, `"add"`, or `"int"` (default `"int"`).
 
-- agg:
+- event:
 
-  A string indicating the aggregation method. One of `"cohort"`,
-  `"simple"`, `"state"`, `"sgt"`, `"time"` or `"none"`.
+  A logical value used to specify if event study plots should be made
+  (`TRUE`) or if parallel trends plots should be made (`FALSE`).
 
-- weighting:
+- weights:
 
-  Weighting scheme to use. One of `"both"`, `"att"`, `"diff"`, or
-  `"none"`.
+  A logical value, if `TRUE`, estimates for the event study plot are
+  computed as weighted averages of state level means for each period
+  relative to their treatment period; if `FALSE`, uses unweighted
+  averages.
 
-- ref:
+- ci:
 
-  Optional named list indicating the reference category for categorical
-  covariates.
+  A number between 0 and 1 used to specify the size of the confidence
+  bands.
 
 - freq:
 
@@ -119,24 +122,6 @@ didint(
 
   Optional latest date to retain in the data.
 
-- nperm:
-
-  Number of permutations for randomization inference. Default is 999.
-
-- verbose:
-
-  Logical value, if `TRUE`, prints progress during randomization
-  inference procedure.
-
-- seed:
-
-  Integer seed for randomization inference.
-
-- notyet:
-
-  Logical value if `TRUE`, uses pre-treatment periods from treated
-  states as controls.
-
 - hc:
 
   Heteroskedasticity-consistent covariance matrix estimator. One of
@@ -144,7 +129,7 @@ didint(
 
 ## Value
 
-A DiDIntObj
+A plot
 
 ## Details
 
@@ -157,25 +142,21 @@ Dates can be entered as strings, numbers, or Date objects. When
 character strings are supplied, the input format must be specified via
 the `date_format` argument (e.g. `"yyyy-mm-dd"`).
 
-Period grids for staggered adoption are constructed automatically, based
-on the inputted data. Otherwise, the period grid can be created manually
-using the arguments `freq`, `freq_multiplier`, `start_date`, and
-`end_date`. More information on this process can be seen on the
-didintrjl documentation site: https://ebjamieson97.github.io/didintrjl/.
+Period grids are constructed automatically, based on the inputted data
+Otherwise, the period grid can be created manually using the arguments
+`freq`, `freq_multiplier`, `start_date`, `end_date`. More information on
+this process can be seen on the didintrjl documentation site:
+https://ebjamieson97.github.io/didintrjl/.
 
 ## References
 
 Karim & Webb (2025). *Good Controls Gone Bad: Difference-in-Differences
 with Covariates*. <https://arxiv.org/abs/2412.14447>
 
-MacKinnon & Webb (2020). *Randomization inference for
-difference-in-differences with few treated clusters*.
-[doi:10.1016/j.jeconom.2020.04.024](https://doi.org/10.1016/j.jeconom.2020.04.024)
-
 ## Examples
 
 ``` r
 file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
 df <- utils::read.csv(file_path)
-#didint()
+#didint_plot()
 ```

@@ -6,7 +6,7 @@ Summary method for `DiDIntObj`
 
 ``` r
 # S3 method for class 'DiDIntObj'
-summary(object, level = c("agg", "sub"), ...)
+summary(object, level = c("all", "agg", "sub"), ...)
 ```
 
 ## Arguments
@@ -17,8 +17,9 @@ summary(object, level = c("agg", "sub"), ...)
 
 - level:
 
-  Specify either `"agg"` or `"sub"` to view the aggregate or
-  sub-aggregate results.
+  Specify either `"agg"`, `"sub"`, or `"all"`, to view the results at
+  the aggregate level, the sub-aggregate level, or to view both
+  simultaneously.
 
 - ...:
 

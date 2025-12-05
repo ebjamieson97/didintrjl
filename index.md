@@ -21,6 +21,8 @@ remotes::install_github("ebjamieson97/didintrjl")
 
 ## Examples
 
+### `didint()`
+
 The
 [`didint()`](https://ebjamieson97.github.io/didintrjl/reference/didint.md)
 function returns an object with the class `DiDIntObj` which has three S3
@@ -45,7 +47,7 @@ res <- didint("coll", "state", "year", df, verbose = FALSE,
               treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
 #> Starting Julia ...
 
-# Print aggregate and then sub-aggregate results
+# Show summary of results
 summary(res)
 #> 
 #>   Model Specification: Two-way DID-INT
@@ -56,25 +58,57 @@ summary(res)
 #>   Last Period: 2000
 #>   Permutations: 999
 #> 
+#> Aggregate Results:
 #>         ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value
-#>  0.04582252 0.01440005 0.01902511  0.1091091   0.01333186         0.0138506
-summary(res, level = "sub")
+#>  0.04582252 0.01440005 0.01902511  0.1071071   0.01333186         0.0138506
 #> 
-#>   Model Specification: Two-way DID-INT
-#>   Weighting: both
-#>   Aggregation: cohort
-#>   Period Length: 1 year
-#>   First Period: 1989
-#>   Last Period: 2000
-#>   Permutations: 999
-#> 
+#> Subaggregate Results:
 #> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
 #> -------------------------------------------------------------------------------------------------------------- 
-#> 1991-01-01               0.0529     0.0244     0.0307     0.5075     0.0244     0.0305     0.2018
-#> 1993-01-01               0.0236     0.0186     0.2044     0.6717     0.0185     0.2037     0.1915
-#> 1996-01-01               0.0564     0.0295     0.0572     0.4645     0.0294     0.0566     0.0757
-#> 1997-01-01               0.0711     0.0271     0.0094     0.2252     0.0270     0.0092     0.3211
-#> 1998-01-01               0.0485     0.0389     0.2146     0.4795     0.0388     0.2128     0.1086
-#> 1999-01-01               0.0120     0.0207     0.5629     0.8719     0.0206     0.5606     0.0355
-#> 2000-01-01              -0.0331     0.0976     0.7364     0.6887     0.0964     0.7334     0.0658
+#> 1991-01-01               0.0529     0.0244     0.0307     0.5175     0.0244     0.0305     0.2018
+#> 1993-01-01               0.0236     0.0186     0.2044     0.6967     0.0185     0.2037     0.1915
+#> 1996-01-01               0.0564     0.0295     0.0572     0.4585     0.0294     0.0566     0.0757
+#> 1997-01-01               0.0711     0.0271     0.0094     0.2052     0.0270     0.0092     0.3211
+#> 1998-01-01               0.0485     0.0389     0.2146     0.4725     0.0388     0.2128     0.1086
+#> 1999-01-01               0.0120     0.0207     0.5629     0.8619     0.0206     0.5606     0.0355
+#> 2000-01-01              -0.0331     0.0976     0.7364     0.7267     0.0964     0.7334     0.0658
+
+# The aggregate and sub-aggregate results can also be accessed via
+res$agg
+#>          att         se       pval   ri_pval  jknife_se jknife_pval
+#> 1 0.04582252 0.01440005 0.01902511 0.1071071 0.01333186   0.0138506
+res$sub
+#>        group         att         se        pval   ri_pval  jknife_se
+#> 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.5175175 0.02436901
+#> 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6966967 0.01852420
+#> 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4584585 0.02943824
+#> 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2052052 0.02697389
+#> 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4724725 0.03876762
+#> 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8618619 0.02061105
+#> 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.7267267 0.09642295
+#>   jknife_pval    weights
+#> 1 0.030478102 0.20179564
+#> 2 0.203684129 0.19153484
+#> 3 0.056599508 0.07567336
+#> 4 0.009152352 0.32107738
+#> 5 0.212809403 0.10859342
+#> 6 0.560591878 0.03548525
+#> 7 0.733434003 0.06584010
+```
+
+### `didint_plot()`
+
+``` r
+# This will make plots soon, right now it just returns data
+res_plot <- didint_plot("coll", "state", "year", df,
+              treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000),
+              covariates = c("asian", "black", "male"))
+head(res_plot)
+#>   state time    lambda ccc period start_date treat_period period_length
+#> 1    11 1989 0.4678955 hom      0       1989           NA        1 year
+#> 2    11 1990 0.3169124 hom      1       1989           NA        1 year
+#> 3    11 1991 0.4459362 hom      2       1989           NA        1 year
+#> 4    11 1992 0.5799970 hom      3       1989           NA        1 year
+#> 5    11 1993 0.6327476 hom      4       1989           NA        1 year
+#> 6    11 1994 0.4142140 hom      5       1989           NA        1 year
 ```
