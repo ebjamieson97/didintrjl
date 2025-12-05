@@ -85,8 +85,9 @@ didint_plot(
 
 - ccc:
 
-  A string specifying the DID-INT specification. One of `"hom"`,
-  `"time"`, `"state"`, `"add"`, or `"int"` (default `"int"`).
+  A string specifying the DID-INT specification. Any combination of
+  `"none"`, `"hom"`, `"time"`, `"state"`, `"add"`, and `"int"`. Or,
+  alternatively, `"all"` (default).
 
 - event:
 
@@ -129,7 +130,7 @@ didint_plot(
 
 ## Value
 
-A plot
+A DiDIntPlotObj.
 
 ## Details
 

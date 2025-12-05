@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">didintrjl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -97,32 +97,32 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Aggregate Results:</span></span>
 <span><span class="co">#&gt;         ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value</span></span>
-<span><span class="co">#&gt;  0.04582252 0.01440005 0.01902511  0.1071071   0.01333186         0.0138506</span></span>
+<span><span class="co">#&gt;  0.04582252 0.01440005 0.01902511  0.1011011   0.01333186         0.0138506</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Subaggregate Results:</span></span>
 <span><span class="co">#&gt; Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------- </span></span>
-<span><span class="co">#&gt; 1991-01-01               0.0529     0.0244     0.0307     0.5175     0.0244     0.0305     0.2018</span></span>
-<span><span class="co">#&gt; 1993-01-01               0.0236     0.0186     0.2044     0.6967     0.0185     0.2037     0.1915</span></span>
-<span><span class="co">#&gt; 1996-01-01               0.0564     0.0295     0.0572     0.4585     0.0294     0.0566     0.0757</span></span>
-<span><span class="co">#&gt; 1997-01-01               0.0711     0.0271     0.0094     0.2052     0.0270     0.0092     0.3211</span></span>
-<span><span class="co">#&gt; 1998-01-01               0.0485     0.0389     0.2146     0.4725     0.0388     0.2128     0.1086</span></span>
-<span><span class="co">#&gt; 1999-01-01               0.0120     0.0207     0.5629     0.8619     0.0206     0.5606     0.0355</span></span>
-<span><span class="co">#&gt; 2000-01-01              -0.0331     0.0976     0.7364     0.7267     0.0964     0.7334     0.0658</span></span>
+<span><span class="co">#&gt; 1991-01-01               0.0529     0.0244     0.0307     0.4765     0.0244     0.0305     0.2018</span></span>
+<span><span class="co">#&gt; 1993-01-01               0.0236     0.0186     0.2044     0.6977     0.0185     0.2037     0.1915</span></span>
+<span><span class="co">#&gt; 1996-01-01               0.0564     0.0295     0.0572     0.4505     0.0294     0.0566     0.0757</span></span>
+<span><span class="co">#&gt; 1997-01-01               0.0711     0.0271     0.0094     0.2132     0.0270     0.0092     0.3211</span></span>
+<span><span class="co">#&gt; 1998-01-01               0.0485     0.0389     0.2146     0.4565     0.0388     0.2128     0.1086</span></span>
+<span><span class="co">#&gt; 1999-01-01               0.0120     0.0207     0.5629     0.8739     0.0206     0.5606     0.0355</span></span>
+<span><span class="co">#&gt; 2000-01-01              -0.0331     0.0976     0.7364     0.7147     0.0964     0.7334     0.0658</span></span>
 <span></span>
 <span><span class="co"># The aggregate and sub-aggregate results can also be accessed via</span></span>
 <span><span class="va">res</span><span class="op">$</span><span class="va">agg</span></span>
 <span><span class="co">#&gt;          att         se       pval   ri_pval  jknife_se jknife_pval</span></span>
-<span><span class="co">#&gt; 1 0.04582252 0.01440005 0.01902511 0.1071071 0.01333186   0.0138506</span></span>
+<span><span class="co">#&gt; 1 0.04582252 0.01440005 0.01902511 0.1011011 0.01333186   0.0138506</span></span>
 <span><span class="va">res</span><span class="op">$</span><span class="va">sub</span></span>
 <span><span class="co">#&gt;        group         att         se        pval   ri_pval  jknife_se</span></span>
-<span><span class="co">#&gt; 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.5175175 0.02436901</span></span>
-<span><span class="co">#&gt; 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6966967 0.01852420</span></span>
-<span><span class="co">#&gt; 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4584585 0.02943824</span></span>
-<span><span class="co">#&gt; 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2052052 0.02697389</span></span>
-<span><span class="co">#&gt; 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4724725 0.03876762</span></span>
-<span><span class="co">#&gt; 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8618619 0.02061105</span></span>
-<span><span class="co">#&gt; 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.7267267 0.09642295</span></span>
+<span><span class="co">#&gt; 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.4764765 0.02436901</span></span>
+<span><span class="co">#&gt; 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6976977 0.01852420</span></span>
+<span><span class="co">#&gt; 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4504505 0.02943824</span></span>
+<span><span class="co">#&gt; 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2132132 0.02697389</span></span>
+<span><span class="co">#&gt; 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4564565 0.03876762</span></span>
+<span><span class="co">#&gt; 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8738739 0.02061105</span></span>
+<span><span class="co">#&gt; 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.7147147 0.09642295</span></span>
 <span><span class="co">#&gt;   jknife_pval    weights</span></span>
 <span><span class="co">#&gt; 1 0.030478102 0.20179564</span></span>
 <span><span class="co">#&gt; 2 0.203684129 0.19153484</span></span>
@@ -136,19 +136,66 @@
 <h3 id="didint_plot">
 <code>didint_plot()</code><a class="anchor" aria-label="anchor" href="#didint_plot"></a>
 </h3>
+<p>The <code><a href="reference/didint_plot.html">didint_plot()</a></code> function returns an object of the class <code>DiDIntPlotObj</code> which has one S3 method: <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. This object also stores the data used to create the plot so that users may directly access the plotting data and create their own customized plots. <code><a href="reference/didint_plot.html">didint_plot()</a></code> can produce either parallel trends plots or event study plots.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># This will make plots soon, right now it just returns data</span></span>
-<span><span class="va">res_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/didint_plot.html">didint_plot</a></span><span class="op">(</span><span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df</span>,</span>
-<span>              treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">1996</span>, <span class="fl">1997</span>, <span class="fl">1997</span>, <span class="fl">1998</span>, <span class="fl">1998</span>, <span class="fl">1999</span>, <span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span>,</span>
-<span>              covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_plot</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Generate the DiDIntPlotObj for event study plot</span></span>
+<span><span class="va">res_event</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/didint_plot.html">didint_plot</a></span><span class="op">(</span></span>
+<span>  <span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df</span>, event <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  treated_states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">71</span>, <span class="fl">58</span>, <span class="fl">64</span>, <span class="fl">59</span>, <span class="fl">85</span>, <span class="fl">57</span>, <span class="fl">72</span>, <span class="fl">61</span>, <span class="fl">34</span>, <span class="fl">88</span><span class="op">)</span>,</span>
+<span>  treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">1996</span>, <span class="fl">1997</span>, <span class="fl">1997</span>, <span class="fl">1998</span>, <span class="fl">1998</span>, <span class="fl">1999</span>,</span>
+<span>                      <span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span>,</span>
+<span>  covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt;     Demean Variables: [=&gt;                               ]  1/121</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_event</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-plots-1.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="co"># For purposes of demonstration, it would be a bit cluttered to show the</span></span>
+<span><span class="co"># parallel trends for each state in the dataset, so here we will just use</span></span>
+<span><span class="co"># a subset</span></span>
+<span><span class="va">df_sub</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">state</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">71</span>, <span class="fl">58</span>, <span class="fl">11</span>, <span class="fl">34</span>, <span class="fl">14</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">res_parallel</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/didint_plot.html">didint_plot</a></span><span class="op">(</span><span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df_sub</span>,</span>
+<span>                            treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">2000</span><span class="op">)</span>,</span>
+<span>                            covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_parallel</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-plots-2.png" width="100%" style="display: block; margin: auto;"></p>
+<p>For both the event study plots and the parallel trends plots it is possible to specify which combination of plots you would like to view via the <code>ccc</code> argument.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_parallel</span>, ccc <span class="op">=</span> <span class="st">"state"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-more_plots-1.png" width="100%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_event</span>, ccc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"none"</span>, <span class="st">"hom"</span>, <span class="st">"int"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-more_plots-2.png" width="100%" style="display: block; margin: auto;"></p>
+<p>If you would like to create your own customized plots using the plotting data, you can acccess it via <code>DiDIntPlotObj$data</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_parallel</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   state time    lambda ccc period start_date treat_period period_length</span></span>
-<span><span class="co">#&gt; 1    11 1989 0.4678955 hom      0       1989           NA        1 year</span></span>
-<span><span class="co">#&gt; 2    11 1990 0.3169124 hom      1       1989           NA        1 year</span></span>
-<span><span class="co">#&gt; 3    11 1991 0.4459362 hom      2       1989           NA        1 year</span></span>
-<span><span class="co">#&gt; 4    11 1992 0.5799970 hom      3       1989           NA        1 year</span></span>
-<span><span class="co">#&gt; 5    11 1993 0.6327476 hom      4       1989           NA        1 year</span></span>
-<span><span class="co">#&gt; 6    11 1994 0.4142140 hom      5       1989           NA        1 year</span></span></code></pre></div>
+<span><span class="co">#&gt; 1    11 1989 0.4676477 hom      0       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 2    11 1990 0.3166708 hom      1       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 3    11 1991 0.4455335 hom      2       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 4    11 1992 0.5796195 hom      3       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 5    11 1993 0.6324456 hom      4       1989           NA        1 year</span></span>
+<span><span class="co">#&gt; 6    11 1994 0.4139365 hom      5       1989           NA        1 year</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">res_event</span><span class="op">$</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   ccc time_since_treatment         y         se    ci_lower  ci_upper</span></span>
+<span><span class="co">#&gt; 1 hom                  -11 0.5282917         NA          NA        NA</span></span>
+<span><span class="co">#&gt; 2 hom                  -10 0.4476755 0.11609859 -0.05185644 0.9472074</span></span>
+<span><span class="co">#&gt; 3 hom                   -9 0.4708055 0.02783482  0.39352366 0.5480874</span></span>
+<span><span class="co">#&gt; 4 hom                   -8 0.4529724 0.03014100  0.37922005 0.5267248</span></span>
+<span><span class="co">#&gt; 5 hom                   -7 0.4970207 0.03668203  0.41028149 0.5837599</span></span>
+<span><span class="co">#&gt; 6 hom                   -6 0.4832311 0.02483194  0.42451293 0.5419493</span></span>
+<span><span class="co">#&gt;   period_length</span></span>
+<span><span class="co">#&gt; 1        1 year</span></span>
+<span><span class="co">#&gt; 2        1 year</span></span>
+<span><span class="co">#&gt; 3        1 year</span></span>
+<span><span class="co">#&gt; 4        1 year</span></span>
+<span><span class="co">#&gt; 5        1 year</span></span>
+<span><span class="co">#&gt; 6        1 year</span></span></code></pre></div>
 </div>
 </div>
 </div>

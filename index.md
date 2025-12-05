@@ -60,32 +60,32 @@ summary(res)
 #> 
 #> Aggregate Results:
 #>         ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value
-#>  0.04582252 0.01440005 0.01902511  0.1071071   0.01333186         0.0138506
+#>  0.04582252 0.01440005 0.01902511  0.1011011   0.01333186         0.0138506
 #> 
 #> Subaggregate Results:
 #> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
 #> -------------------------------------------------------------------------------------------------------------- 
-#> 1991-01-01               0.0529     0.0244     0.0307     0.5175     0.0244     0.0305     0.2018
-#> 1993-01-01               0.0236     0.0186     0.2044     0.6967     0.0185     0.2037     0.1915
-#> 1996-01-01               0.0564     0.0295     0.0572     0.4585     0.0294     0.0566     0.0757
-#> 1997-01-01               0.0711     0.0271     0.0094     0.2052     0.0270     0.0092     0.3211
-#> 1998-01-01               0.0485     0.0389     0.2146     0.4725     0.0388     0.2128     0.1086
-#> 1999-01-01               0.0120     0.0207     0.5629     0.8619     0.0206     0.5606     0.0355
-#> 2000-01-01              -0.0331     0.0976     0.7364     0.7267     0.0964     0.7334     0.0658
+#> 1991-01-01               0.0529     0.0244     0.0307     0.4765     0.0244     0.0305     0.2018
+#> 1993-01-01               0.0236     0.0186     0.2044     0.6977     0.0185     0.2037     0.1915
+#> 1996-01-01               0.0564     0.0295     0.0572     0.4505     0.0294     0.0566     0.0757
+#> 1997-01-01               0.0711     0.0271     0.0094     0.2132     0.0270     0.0092     0.3211
+#> 1998-01-01               0.0485     0.0389     0.2146     0.4565     0.0388     0.2128     0.1086
+#> 1999-01-01               0.0120     0.0207     0.5629     0.8739     0.0206     0.5606     0.0355
+#> 2000-01-01              -0.0331     0.0976     0.7364     0.7147     0.0964     0.7334     0.0658
 
 # The aggregate and sub-aggregate results can also be accessed via
 res$agg
 #>          att         se       pval   ri_pval  jknife_se jknife_pval
-#> 1 0.04582252 0.01440005 0.01902511 0.1071071 0.01333186   0.0138506
+#> 1 0.04582252 0.01440005 0.01902511 0.1011011 0.01333186   0.0138506
 res$sub
 #>        group         att         se        pval   ri_pval  jknife_se
-#> 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.5175175 0.02436901
-#> 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6966967 0.01852420
-#> 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4584585 0.02943824
-#> 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2052052 0.02697389
-#> 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4724725 0.03876762
-#> 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8618619 0.02061105
-#> 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.7267267 0.09642295
+#> 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.4764765 0.02436901
+#> 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6976977 0.01852420
+#> 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4504505 0.02943824
+#> 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2132132 0.02697389
+#> 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4564565 0.03876762
+#> 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8738739 0.02061105
+#> 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.7147147 0.09642295
 #>   jknife_pval    weights
 #> 1 0.030478102 0.20179564
 #> 2 0.203684129 0.19153484
@@ -98,17 +98,89 @@ res$sub
 
 ### `didint_plot()`
 
+The
+[`didint_plot()`](https://ebjamieson97.github.io/didintrjl/reference/didint_plot.md)
+function returns an object of the class `DiDIntPlotObj` which has one S3
+method: [`plot()`](https://rdrr.io/r/graphics/plot.default.html). This
+object also stores the data used to create the plot so that users may
+directly access the plotting data and create their own customized plots.
+[`didint_plot()`](https://ebjamieson97.github.io/didintrjl/reference/didint_plot.md)
+can produce either parallel trends plots or event study plots.
+
 ``` r
-# This will make plots soon, right now it just returns data
-res_plot <- didint_plot("coll", "state", "year", df,
-              treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000),
-              covariates = c("asian", "black", "male"))
-head(res_plot)
+# Generate the DiDIntPlotObj for event study plot
+res_event <- didint_plot(
+  "coll", "state", "year", df, event = TRUE,
+  treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88),
+  treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999,
+                      2000, 2000),
+  covariates = c("asian", "black", "male")
+)
+#>     Demean Variables: [=>                               ]  1/121
+
+plot(res_event)
+```
+
+![](reference/figures/README-plots-1.png)
+
+``` r
+
+# For purposes of demonstration, it would be a bit cluttered to show the
+# parallel trends for each state in the dataset, so here we will just use
+# a subset
+df_sub <- df[df$state %in% c(71, 58, 11, 34, 14), ]
+res_parallel <- didint_plot("coll", "state", "year", df_sub,
+                            treatment_times = c(1991, 1993, 2000),
+                            covariates = c("asian", "black", "male"))
+
+plot(res_parallel)
+```
+
+![](reference/figures/README-plots-2.png)
+
+For both the event study plots and the parallel trends plots it is
+possible to specify which combination of plots you would like to view
+via the `ccc` argument.
+
+``` r
+
+plot(res_parallel, ccc = "state")
+```
+
+![](reference/figures/README-more_plots-1.png)
+
+``` r
+
+plot(res_event, ccc = c("none", "hom", "int"))
+```
+
+![](reference/figures/README-more_plots-2.png)
+
+If you would like to create your own customized plots using the plotting
+data, you can acccess it via `DiDIntPlotObj$data`.
+
+``` r
+head(res_parallel$data)
 #>   state time    lambda ccc period start_date treat_period period_length
-#> 1    11 1989 0.4678955 hom      0       1989           NA        1 year
-#> 2    11 1990 0.3169124 hom      1       1989           NA        1 year
-#> 3    11 1991 0.4459362 hom      2       1989           NA        1 year
-#> 4    11 1992 0.5799970 hom      3       1989           NA        1 year
-#> 5    11 1993 0.6327476 hom      4       1989           NA        1 year
-#> 6    11 1994 0.4142140 hom      5       1989           NA        1 year
+#> 1    11 1989 0.4676477 hom      0       1989           NA        1 year
+#> 2    11 1990 0.3166708 hom      1       1989           NA        1 year
+#> 3    11 1991 0.4455335 hom      2       1989           NA        1 year
+#> 4    11 1992 0.5796195 hom      3       1989           NA        1 year
+#> 5    11 1993 0.6324456 hom      4       1989           NA        1 year
+#> 6    11 1994 0.4139365 hom      5       1989           NA        1 year
+head(res_event$data)
+#>   ccc time_since_treatment         y         se    ci_lower  ci_upper
+#> 1 hom                  -11 0.5282917         NA          NA        NA
+#> 2 hom                  -10 0.4476755 0.11609859 -0.05185644 0.9472074
+#> 3 hom                   -9 0.4708055 0.02783482  0.39352366 0.5480874
+#> 4 hom                   -8 0.4529724 0.03014100  0.37922005 0.5267248
+#> 5 hom                   -7 0.4970207 0.03668203  0.41028149 0.5837599
+#> 6 hom                   -6 0.4832311 0.02483194  0.42451293 0.5419493
+#>   period_length
+#> 1        1 year
+#> 2        1 year
+#> 3        1 year
+#> 4        1 year
+#> 5        1 year
+#> 6        1 year
 ```

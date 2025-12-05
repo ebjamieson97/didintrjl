@@ -13,7 +13,7 @@ print(x, level = c("agg", "sub"), ...)
 
 - x:
 
-  A `DiDIntObj` object
+  A `DiDIntObj` object.
 
 - level:
 
