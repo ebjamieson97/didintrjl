@@ -68,6 +68,7 @@ jobs:
             echo "Julia version should be ${{ matrix.config.julia }}";
             exit 1;
           fi
+        shell: bash
       
       - uses: r-lib/actions/check-r-package@v2
         with:

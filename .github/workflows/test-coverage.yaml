@@ -27,6 +27,16 @@ jobs:
           extra-packages: any::covr, any::xml2
           needs: coverage
 
+      # Add Julia setup
+      - uses: julia-actions/setup-julia@v1
+        with:
+          version: '1.10' 
+          
+      # Install DiDInt.jl
+      - name: Install DiDInt.jl
+        run: |
+          julia -e 'using Pkg; Pkg.add(url="https://github.com/ebjamieson97/DiDInt.jl")'
+
       - name: Test coverage
         run: |
           cov <- covr::package_coverage(
