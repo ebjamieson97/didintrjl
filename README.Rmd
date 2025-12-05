@@ -62,12 +62,44 @@ res$sub
 ```
 
 ### `didint_plot()`
+The `didint_plot()` function returns an object of the class `DiDIntPlotObj` which has one S3 method: `plot()`. This object also stores the data used to create the plot
+so that users may directly access the plotting data and create their own customized plots. `didint_plot()` can produce either parallel trends plots or event study plots.
 
-```{r}
-# This will make plots soon, right now it just returns data
-res_plot <- didint_plot("coll", "state", "year", df,
-              treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000),
-              covariates = c("asian", "black", "male"))
-head(res_plot)
+```{r plots, fig.width=8, fig.height=10, out.width = "100%", dpi=300, fig.align="center"}
+# Generate the DiDIntPlotObj for event study plot
+res_event <- didint_plot(
+  "coll", "state", "year", df, event = TRUE,
+  treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88),
+  treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999,
+                      2000, 2000),
+  covariates = c("asian", "black", "male")
+)
+
+plot(res_event)
+
+# For purposes of demonstration, it would be a bit cluttered to show the
+# parallel trends for each state in the dataset, so here we will just use
+# a subset
+df_sub <- df[df$state %in% c(71, 58, 11, 34, 14), ]
+res_parallel <- didint_plot("coll", "state", "year", df_sub,
+                            treatment_times = c(1991, 1993, 2000),
+                            covariates = c("asian", "black", "male"))
+
+plot(res_parallel)
 ```
 
+For both the event study plots and the parallel trends plots it is possible to specify which combination of plots you would like to view via the `ccc` argument.
+
+```{r more_plots, fig.width=8, fig.height=10, out.width = "100%", dpi=300, fig.align="center"}
+
+plot(res_parallel, ccc = "state")
+
+plot(res_event, ccc = c("none", "hom", "int"))
+```
+
+If you would like to create your own customized plots using the plotting data, you can acccess it via `DiDIntPlotObj$data`.
+
+```{r}
+head(res_parallel$data)
+head(res_event$data)
+```

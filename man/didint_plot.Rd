@@ -57,7 +57,8 @@ covariates to include.}
 categorical covariates.}
 
 \item{ccc}{A string specifying the DID-INT specification.
-One of \code{"hom"}, \code{"time"}, \code{"state"}, \code{"add"}, or \code{"int"} (default \code{"int"}).}
+Any combination of \code{"none"}, \code{"hom"}, \code{"time"}, \code{"state"}, \code{"add"},
+and \code{"int"}. Or, alternatively, \code{"all"} (default).}
 
 \item{event}{A logical value used to specify if event study plots should be
 made (\code{TRUE}) or if parallel trends plots should be made (\code{FALSE}).}
@@ -82,7 +83,7 @@ adoption. One of \code{"year"}, \code{"month"}, \code{"week"}, \code{"day"}.}
 One of \code{"hc0"}, \code{"hc1"}, \code{"hc2"}, \code{"hc3"}, \code{"hc4"}.}
 }
 \value{
-A plot
+A DiDIntPlotObj.
 }
 \description{
 \code{didint_plot()} produces either event study plots or parallel trends plots

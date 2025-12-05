@@ -7,7 +7,7 @@
 \method{print}{DiDIntObj}(x, level = c("agg", "sub"), ...)
 }
 \arguments{
-\item{x}{A \code{DiDIntObj} object}
+\item{x}{A \code{DiDIntObj} object.}
 
 \item{level}{Specify either \code{"agg"} or \code{"sub"} to view the aggregate
 or sub-aggregate results.}

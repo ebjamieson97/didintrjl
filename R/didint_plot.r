@@ -35,7 +35,8 @@
 #'   or Dates, corresponding to `treated_states`.
 #'
 #' @param ccc A string specifying the DID-INT specification.
-#'   One of `"hom"`, `"time"`, `"state"`, `"add"`, or `"int"` (default `"int"`).
+#'   Any combination of `"none"`, `"hom"`, `"time"`, `"state"`, `"add"`,
+#'   and `"int"`. Or, alternatively, `"all"` (default).
 #' @param covariates Optional string or vector of strings specifying
 #'   covariates to include.
 #' @param ref Optional named list indicating the reference category for
@@ -63,7 +64,7 @@
 #' @param end_date Optional latest date to retain in the data.
 #'
 #' @returns
-#' A plot
+#' A DiDIntPlotObj.
 #'
 #' @examples
 #' file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
@@ -104,8 +105,8 @@ didint_plot <- function(
   didintrjl_plot <- DiDInt$didint_plot
 
   # If event is specified do the check for state column characters
+  data[, state] <- as.character(data[, state])
   if (event == TRUE) {
-    data[, state] <- as.character(data[, state])
     treated_states <- as.character(treated_states)
   }
 
@@ -132,5 +133,118 @@ didint_plot <- function(
     hc = hc,
     wrapper = "r"
   )
-  as.data.frame(df)
+  out <- list(data = as.data.frame(df),
+              outcome = outcome)
+  class(out) <- "DiDIntPlotObj"
+  out
+}
+
+#' @title Plot method for \code{DiDIntPlotObj}
+#'
+#' @param x A \code{DiDIntPlotObj} object.
+#' @param y `NULL` value passed to `plot()` method.
+#' @param ccc Specify which `ccc` options you would like plotted from the data.
+#'   Any combination of `"none"`, `"hom"`, `"time"`, `"state"`, `"add"`,
+#'   and `"int"`. Or, alternatively, `"all"` (default).
+#' @param ... other arguments
+#' @importFrom ggplot2 ggplot aes geom_line geom_vline theme element_text margin
+#' @importFrom ggplot2 facet_wrap scale_x_continuous labs theme_bw unit
+#' @importFrom ggplot2 geom_ribbon geom_point element_blank
+#' @export
+plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", ...) {
+
+  df <- x$data
+  outcome <- x$outcome
+
+  # Make sure inputted ccc options are valid
+  ccc <- tolower(trimws(ccc))
+  ccc_options <- c("all", "none", "hom", "time", "state", "add", "int")
+  if (!all(ccc %in% ccc_options)) {
+    stop("Invalid value(s) in `ccc`. Allowed options are: ",
+         paste(ccc_options, collapse = ", "))
+  }
+
+  # Do event study plot if "time_since_treatment" column exists
+  if ("time_since_treatment" %in% names(df)) {
+
+    df$se_missing <- is.na(df$se)
+    df <- .plot_ccc_check(df, ccc)
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = time_since_treatment, y = y)) +
+      ggplot2::geom_ribbon(
+        data = df[!df$se_missing, ],
+        ggplot2::aes(ymin = ci_lower, ymax = ci_upper),
+        fill = "steelblue",
+        alpha = 0.2,
+        colour = NA
+      ) +
+      ggplot2::geom_line(linewidth = 1) +
+      ggplot2::geom_point(
+        data = df[df$se_missing, ],
+        shape = 15, size = 3, colour = "black"
+      ) +
+      ggplot2::geom_point(
+        data = df[!df$se_missing, ],
+        shape = 16, size = 3, colour = "black"
+      ) +
+      ggplot2::geom_vline(xintercept = 0,
+                          linetype = "dotted", color = "black",
+                          linewidth = 0.7) +
+      ggplot2::facet_wrap(~ ccc) +
+      ggplot2::scale_x_continuous(
+        breaks = df$time_since_treatment,
+        labels = ifelse(abs(df$time_since_treatment) %% 2 == 0,
+                        df$time_since_treatment, "")
+      ) +
+      ggplot2::labs(
+        x = "Periods Relative to Treatment",
+        y = paste0(outcome, " (residualized by covariates)")
+      ) +
+      ggplot2::theme_bw(base_size = 13) +
+      ggplot2::theme(
+        strip.text = ggplot2::element_text(size = 12, face = "bold"),
+        panel.spacing = ggplot2::unit(1, "lines"),
+        axis.text.y = ggplot2::element_text(size = 13),
+        axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 12)),
+        axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
+        panel.grid.minor = ggplot2::element_blank(),
+        panel.grid.major.x = ggplot2::element_blank()
+      )
+
+    # Otherwise do parallel trends plot
+  } else {
+
+    # Grab treated states, order ccc, drop NA rows
+    treat_periods <- unique(df$treat_period[!is.na(df$treat_period)])
+    df <- df[is.na(df$treat_period), ]
+    df <- .plot_ccc_check(df, ccc)
+
+    # Make plot
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = period, y = lambda,
+                                          color = state)) +
+      ggplot2::geom_line(linewidth = 1) +
+      ggplot2::geom_vline(xintercept = treat_periods,
+                          linetype = "dotted", color = "black",
+                          linewidth = 0.7) +
+      ggplot2::facet_wrap(~ ccc) +
+      ggplot2::scale_x_continuous(
+        breaks = df$period,
+        labels = ifelse(df$period %% 2 == 0, df$time, "")
+      ) +
+      ggplot2::labs(
+        x = "Time",
+        y = paste0(outcome, " (residualized by covariates)"),
+        color = "State"
+      ) +
+      ggplot2::theme_bw(base_size = 13) +
+      ggplot2::theme(
+        legend.position = "bottom",
+        strip.text = ggplot2::element_text(size = 12, face = "bold"),
+        panel.spacing = ggplot2::unit(1, "lines"),
+        axis.text.y = ggplot2::element_text(size = 13),
+        axis.title.x = ggplot2::element_text(margin = ggplot2::margin(t = 12)),
+        axis.title.y = ggplot2::element_text(margin = ggplot2::margin(r = 12)),
+        legend.text = ggplot2::element_text(size = 13)
+      )
+  }
+  p
 }

@@ -174,7 +174,8 @@ didint <- function(
 #' @param weighting The weighting method that was used.
 #' @param agg The aggregation method that was used.
 #' @return DiDIntObj with class "DiDIntObj"
-#' @export
+#' @keywords internal
+#' @noRd
 create_didint_object <- function(result, ccc, weighting, agg) {
 
   # Check if sub-aggregate results were produced
@@ -274,7 +275,7 @@ create_didint_object <- function(result, ccc, weighting, agg) {
 
 #' @title Print method for \code{DiDIntObj}
 #'
-#' @param x A \code{DiDIntObj} object
+#' @param x A \code{DiDIntObj} object.
 #' @param level Specify either `"agg"` or `"sub"` to view the aggregate
 #'   or sub-aggregate results.
 #' @param ... other arguments

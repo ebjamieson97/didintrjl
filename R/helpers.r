@@ -24,3 +24,24 @@
   # Import DiDInt
   JuliaConnectoR::juliaImport("DiDInt")
 }
+
+#' @keywords internal
+#' Checks the ccc args and filters the data for plotting
+.plot_ccc_check <- function(df, ccc) {
+  if (!("all" %in% ccc)) {
+    df <- df[df$ccc %in% ccc, ]
+  }
+  df$ccc[df$ccc == "none"] <- "No covariates"
+  df$ccc[df$ccc == "hom"] <- "Homogeneous covariates"
+  df$ccc[df$ccc == "state"] <- "State-varying covariates"
+  df$ccc[df$ccc == "time"] <- "Time-varying covariates"
+  df$ccc[df$ccc == "add"] <- "Two one-way covariates"
+  df$ccc[df$ccc == "int"] <- "Two-way intersection covariates"
+  df$ccc <- factor(df$ccc, levels = c("No covariates",
+                                      "Homogeneous covariates",
+                                      "State-varying covariates",
+                                      "Time-varying covariates",
+                                      "Two one-way covariates",
+                                      "Two-way intersection covariates"))
+  df
+}
