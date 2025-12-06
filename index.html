@@ -60,7 +60,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("remotes")</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"ebjamieson97/didintrjl"</span><span class="op">)</span></span></code></pre></div>
-<p>Since <strong>didintrjl</strong> is a wrapper for the Julia pacakage <a href="https://ebjamieson97.github.io/DiDInt.jl/dev/" class="external-link">DiDInt.jl</a>, you may need to update the Julia package itself from time to time. You can do this directly from R using the brilliant <a href="github.com/stefan-m-lenz/JuliaConnectoR">JuliaConnectoR</a> which is the package that <strong>didintrjl</strong> uses to interface with Julia.</p>
+<p>Since <strong>didintrjl</strong> is a wrapper for the Julia pacakage <a href="https://ebjamieson97.github.io/DiDInt.jl/dev/" class="external-link">DiDInt.jl</a>, you may need to update the Julia package itself from time to time. You can do this directly from R using the brilliant <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link">JuliaConnectoR</a> which is the package that <strong>didintrjl</strong> uses to interface with Julia.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">JuliaConnectoR</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaEval.html" class="external-link">juliaEval</a></span><span class="op">(</span><span class="st">'using Pkg; Pkg.add(url="https://github.com/ebjamieson97/DiDInt.jl")'</span><span class="op">)</span></span></code></pre></div>
@@ -105,32 +105,32 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Aggregate Results:</span></span>
 <span><span class="co">#&gt;         ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value</span></span>
-<span><span class="co">#&gt;  0.04582252 0.01440005 0.01902511  0.1081081   0.01333186         0.0138506</span></span>
+<span><span class="co">#&gt;  0.04582252 0.01440005 0.01902511  0.1031031   0.01333186         0.0138506</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Subaggregate Results:</span></span>
 <span><span class="co">#&gt; Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------- </span></span>
 <span><span class="co">#&gt; 1991-01-01               0.0529     0.0244     0.0307     0.4945     0.0244     0.0305     0.2018</span></span>
-<span><span class="co">#&gt; 1993-01-01               0.0236     0.0186     0.2044     0.6997     0.0185     0.2037     0.1915</span></span>
-<span><span class="co">#&gt; 1996-01-01               0.0564     0.0295     0.0572     0.4775     0.0294     0.0566     0.0757</span></span>
-<span><span class="co">#&gt; 1997-01-01               0.0711     0.0271     0.0094     0.1932     0.0270     0.0092     0.3211</span></span>
+<span><span class="co">#&gt; 1993-01-01               0.0236     0.0186     0.2044     0.6877     0.0185     0.2037     0.1915</span></span>
+<span><span class="co">#&gt; 1996-01-01               0.0564     0.0295     0.0572     0.4484     0.0294     0.0566     0.0757</span></span>
+<span><span class="co">#&gt; 1997-01-01               0.0711     0.0271     0.0094     0.2112     0.0270     0.0092     0.3211</span></span>
 <span><span class="co">#&gt; 1998-01-01               0.0485     0.0389     0.2146     0.4685     0.0388     0.2128     0.1086</span></span>
-<span><span class="co">#&gt; 1999-01-01               0.0120     0.0207     0.5629     0.8739     0.0206     0.5606     0.0355</span></span>
-<span><span class="co">#&gt; 2000-01-01              -0.0331     0.0976     0.7364     0.6977     0.0964     0.7334     0.0658</span></span>
+<span><span class="co">#&gt; 1999-01-01               0.0120     0.0207     0.5629     0.8809     0.0206     0.5606     0.0355</span></span>
+<span><span class="co">#&gt; 2000-01-01              -0.0331     0.0976     0.7364     0.6997     0.0964     0.7334     0.0658</span></span>
 <span></span>
 <span><span class="co"># The aggregate and sub-aggregate results can also be accessed via</span></span>
 <span><span class="va">res</span><span class="op">$</span><span class="va">agg</span></span>
 <span><span class="co">#&gt;          att         se       pval   ri_pval  jknife_se jknife_pval</span></span>
-<span><span class="co">#&gt; 1 0.04582252 0.01440005 0.01902511 0.1081081 0.01333186   0.0138506</span></span>
+<span><span class="co">#&gt; 1 0.04582252 0.01440005 0.01902511 0.1031031 0.01333186   0.0138506</span></span>
 <span><span class="va">res</span><span class="op">$</span><span class="va">sub</span></span>
 <span><span class="co">#&gt;        group         att         se        pval   ri_pval  jknife_se</span></span>
 <span><span class="co">#&gt; 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.4944945 0.02436901</span></span>
-<span><span class="co">#&gt; 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6996997 0.01852420</span></span>
-<span><span class="co">#&gt; 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4774775 0.02943824</span></span>
-<span><span class="co">#&gt; 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.1931932 0.02697389</span></span>
+<span><span class="co">#&gt; 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6876877 0.01852420</span></span>
+<span><span class="co">#&gt; 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4484484 0.02943824</span></span>
+<span><span class="co">#&gt; 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2112112 0.02697389</span></span>
 <span><span class="co">#&gt; 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4684685 0.03876762</span></span>
-<span><span class="co">#&gt; 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8738739 0.02061105</span></span>
-<span><span class="co">#&gt; 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.6976977 0.09642295</span></span>
+<span><span class="co">#&gt; 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8808809 0.02061105</span></span>
+<span><span class="co">#&gt; 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.6996997 0.09642295</span></span>
 <span><span class="co">#&gt;   jknife_pval    weights</span></span>
 <span><span class="co">#&gt; 1 0.030478102 0.20179564</span></span>
 <span><span class="co">#&gt; 2 0.203684129 0.19153484</span></span>
