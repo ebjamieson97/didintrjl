@@ -146,15 +146,30 @@ didint_plot <- function(
 #' @param ccc Specify which `ccc` options you would like plotted from the data.
 #'   Any combination of `"none"`, `"hom"`, `"time"`, `"state"`, `"add"`,
 #'   and `"int"`. Or, alternatively, `"all"` (default).
+#' @param groupmin The minimum number of states used to compute a point on
+#'   the event study for which the confidence band should be shown. Defaults
+#'   to `3`.
+#' @param window Either `NULL` or a vector with two elements defining the first
+#'   and last period that should be plotted.
 #' @param ... other arguments
 #' @importFrom ggplot2 ggplot aes geom_line geom_vline theme element_text margin
 #' @importFrom ggplot2 facet_wrap scale_x_continuous labs theme_bw unit
 #' @importFrom ggplot2 geom_ribbon geom_point element_blank
 #' @export
-plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", ...) {
+plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", groupmin = 3,
+                               window = NULL, ...) {
 
   df <- x$data
   outcome <- x$outcome
+
+  # Check window arg
+  if (!is.null(window)) {
+    if (!(is.numeric(window) && length(window) == 2)) {
+      stop("'window' must be a numeric vector with two elements!")
+    } else {
+      window <- round(window)
+    }
+  }
 
   # Make sure inputted ccc options are valid
   ccc <- tolower(trimws(ccc))
@@ -166,6 +181,23 @@ plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", ...) {
 
   # Do event study plot if "time_since_treatment" column exists
   if ("time_since_treatment" %in% names(df)) {
+
+    # Apply the window
+    if (!is.null(window)) {
+      df <- df[(df$time_since_treatment >= window[1] &
+                  df$time_since_treatment <= window[2]), ]
+    }
+
+    # Apply the groupmin rule
+    if (!(is.numeric(groupmin) && length(groupmin) == 1)) {
+      stop("'groupmin' arg must be numeric of length 1!")
+    } else {
+      groupmin <- round(groupmin)
+      applicable <- sum(df$ngroup < groupmin) > 0
+      if (applicable) {
+        df[df$ngroup < groupmin, ]$se <- NA
+      }
+    }
 
     df$se_missing <- is.na(df$se)
     df <- .plot_ccc_check(df, ccc)
@@ -216,6 +248,13 @@ plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", ...) {
     # Grab treated states, order ccc, drop NA rows
     treat_periods <- unique(df$treat_period[!is.na(df$treat_period)])
     df <- df[is.na(df$treat_period), ]
+    # Apply the window
+    if (!is.null(window)) {
+      df <- df[(df$period >= window[1] &
+                  df$period <= window[2]), ]
+      treat_periods <- treat_periods[treat_periods >= window[1] &
+                                       treat_periods <= window[2]]
+    }
     df <- .plot_ccc_check(df, ccc)
 
     # Make plot

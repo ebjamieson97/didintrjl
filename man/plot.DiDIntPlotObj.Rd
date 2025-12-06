@@ -4,7 +4,7 @@
 \alias{plot.DiDIntPlotObj}
 \title{Plot method for \code{DiDIntPlotObj}}
 \usage{
-\method{plot}{DiDIntPlotObj}(x, y = NULL, ccc = "all", ...)
+\method{plot}{DiDIntPlotObj}(x, y = NULL, ccc = "all", groupmin = 3, window = NULL, ...)
 }
 \arguments{
 \item{x}{A \code{DiDIntPlotObj} object.}
@@ -14,6 +14,13 @@
 \item{ccc}{Specify which \code{ccc} options you would like plotted from the data.
 Any combination of \code{"none"}, \code{"hom"}, \code{"time"}, \code{"state"}, \code{"add"},
 and \code{"int"}. Or, alternatively, \code{"all"} (default).}
+
+\item{groupmin}{The minimum number of states used to compute a point on
+the event study for which the confidence band should be shown. Defaults
+to \code{3}.}
+
+\item{window}{Either \code{NULL} or a vector with two elements defining the first
+and last period that should be plotted.}
 
 \item{...}{other arguments}
 }
