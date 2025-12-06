@@ -65,7 +65,7 @@ res$sub
 The `didint_plot()` function returns an object of the class `DiDIntPlotObj` which has one S3 method: `plot()`. This object also stores the data used to create the plot
 so that users may directly access the plotting data and create their own customized plots. `didint_plot()` can produce either parallel trends plots or event study plots.
 
-```{r plots, fig.width=8, fig.height=10, out.width = "100%", dpi=300, fig.align="center"}
+```{r plots, fig.width=9, fig.height=10, out.width = "100%", dpi=300, fig.align="center"}
 # Generate the DiDIntPlotObj for event study plot
 res_event <- didint_plot(
   "coll", "state", "year", df, event = TRUE,
@@ -90,10 +90,12 @@ plot(res_parallel)
 
 For both the event study plots and the parallel trends plots it is possible to specify which combination of plots you would like to view via the `ccc` argument.
 
-```{r more_plots, fig.width=8, fig.height=10, out.width = "100%", dpi=300, fig.align="center"}
+```{r more_plots_parallel, fig.width=8, fig.height=6, out.width = "100%", dpi=300, fig.align="center"}
 
 plot(res_parallel, ccc = "state")
+```
 
+```{r more_plots_event, fig.width=9, fig.height=6, out.width = "100%", dpi=300, fig.align="center"}
 plot(res_event, ccc = c("none", "hom", "int"))
 ```
 

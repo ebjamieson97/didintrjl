@@ -9,6 +9,7 @@ permissions: read-all
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
+    timeout-minutes: 90
     name: ${{ matrix.config.os }} (R ${{ matrix.config.r }}, Julia ${{ matrix.config.julia }})
     strategy:
       fail-fast: false
@@ -16,7 +17,8 @@ jobs:
         config:
           - {os: macos-latest,   r: 'release', julia: '1.10'}
           - {os: windows-latest, r: 'release', julia: '1.10'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', julia: '1.10'}
+          # Temporarily skip R-devel due to yaml package compilation issues with missing R_ext/PrtUtil.h
+          # - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', julia: '1.10'}
           - {os: ubuntu-latest,   r: 'release', julia: '1.10'}
           - {os: ubuntu-latest,   r: 'oldrel-1', julia: '1.10'}
     env:
@@ -38,26 +40,28 @@ jobs:
         with:
           version: ${{ matrix.config.julia }}
       
-      # Cache both R and Julia packages together
-      - name: Cache R packages and Julia packages
+      # Cache Julia packages separately with stable key
+      - name: Cache Julia packages
         uses: actions/cache@v4
         with:
           path: |
-            ${{ env.R_LIBS_USER }}/*
-            !${{ env.R_LIBS_USER }}/pak
             ~/.julia/artifacts/
             ~/.julia/packages/
-          key: ${{ matrix.config.r }}-${{ matrix.config.julia }}-${{ runner.os }}-${{ hashFiles('DESCRIPTION') }}
+            ~/.julia/compiled/
+          key: julia-${{ matrix.config.julia }}-${{ runner.os }}-v1
+          restore-keys: |
+            julia-${{ matrix.config.julia }}-${{ runner.os }}-
       
-      # Install DiDInt.jl package
+      # Install DiDInt.jl package with explicit precompilation
       - name: Install DiDInt.jl
-        run: julia -e 'using Pkg; Pkg.add(url="https://github.com/ebjamieson97/DiDInt.jl")'
+        run: |
+          julia -e 'using Pkg; Pkg.add(url="https://github.com/ebjamieson97/DiDInt.jl"); Pkg.precompile()'
       
+      # Let setup-r-dependencies handle R package caching automatically
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck, local::.
           needs: check
-          cache: false
       
       # Verify JuliaConnectoR picks up correct Julia version
       - name: Make sure the JuliaConnectoR will pick up the right Julia version
