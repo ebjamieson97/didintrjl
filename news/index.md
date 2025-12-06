@@ -1,5 +1,14 @@
 # Changelog
 
+## didintrjl 0.2.0
+
+- Added arguments `window` and `mingroup` to the
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) method for
+  `DiDIntPlotObj`. These new arguments allow the user to specify the
+  range of periods plotted, and the points for which they want the
+  confidence band to appear in the case of events plots. These new
+  arguments require updating the DiDInt.jl package for Julia to v0.6.15.
+
 ## didintrjl 0.1.0
 
 - [`didint_plot()`](https://ebjamieson97.github.io/didintrjl/reference/didint_plot.md)

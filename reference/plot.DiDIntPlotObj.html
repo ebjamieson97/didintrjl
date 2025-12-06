@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">didintrjl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'DiDIntPlotObj'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, ccc <span class="op">=</span> <span class="st">"all"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, y <span class="op">=</span> <span class="cn">NULL</span>, ccc <span class="op">=</span> <span class="st">"all"</span>, groupmin <span class="op">=</span> <span class="fl">3</span>, window <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,6 +60,17 @@
 <dd><p>Specify which <code>ccc</code> options you would like plotted from the data.
 Any combination of <code>"none"</code>, <code>"hom"</code>, <code>"time"</code>, <code>"state"</code>, <code>"add"</code>,
 and <code>"int"</code>. Or, alternatively, <code>"all"</code> (default).</p></dd>
+
+
+<dt id="arg-groupmin">groupmin<a class="anchor" aria-label="anchor" href="#arg-groupmin"></a></dt>
+<dd><p>The minimum number of states used to compute a point on
+the event study for which the confidence band should be shown. Defaults
+to <code>3</code>.</p></dd>
+
+
+<dt id="arg-window">window<a class="anchor" aria-label="anchor" href="#arg-window"></a></dt>
+<dd><p>Either <code>NULL</code> or a vector with two elements defining the first
+and last period that should be plotted.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
