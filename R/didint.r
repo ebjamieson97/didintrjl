@@ -67,6 +67,8 @@
 #' @param seed Integer seed for randomization inference.
 #' @param hc Heteroskedasticity-consistent covariance matrix estimator.
 #'   One of `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"`.
+#' @param truejack Logical value, if `TRUE`, re-estimates the DID-INT
+#'   model from the first step (if `ccc` option is not `"int"` or "`state`").
 #'
 #' @returns
 #' A DiDIntObj
@@ -109,7 +111,8 @@ didint <- function(
   verbose = TRUE,
   seed = sample.int(1000000, 1),
   notyet = NULL,
-  hc = "hc3"
+  hc = "hc3",
+  truejack = FALSE
 ) {
 
   # Import DiDInt
@@ -143,7 +146,8 @@ didint <- function(
                       seed = seed,
                       notyet = notyet,
                       hc = hc,
-                      wrapper = "r")
+                      wrapper = "r",
+                      truejack = truejack)
   result <- as.data.frame(result)
 
   # Rename any of the sub-aggregate att columns for ease of conversion
