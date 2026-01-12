@@ -33,7 +33,8 @@ didint(
   verbose = TRUE,
   seed = sample.int(1e+06, 1),
   notyet = NULL,
-  hc = "hc3"
+  hc = "hc3",
+  truejack = FALSE
 )
 ```
 
@@ -141,6 +142,11 @@ didint(
 
   Heteroskedasticity-consistent covariance matrix estimator. One of
   `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"`.
+
+- truejack:
+
+  Logical value, if `TRUE`, re-estimates the DID-INT model from the
+  first step (if `ccc` option is not `"int"` or "`state`").
 
 ## Value
 

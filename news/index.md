@@ -1,5 +1,10 @@
 # Changelog
 
+## didintrjl 0.2.1
+
+- Added the `truejack` option, which re-estimates the DID-INT model from
+  step 1 while calculating the jackknife if set to `TRUE`.
+
 ## didintrjl 0.2.0
 
 - Added arguments `window` and `mingroup` to the

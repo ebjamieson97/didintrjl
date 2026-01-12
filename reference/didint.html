@@ -80,7 +80,8 @@ https://ebjamieson97.github.io/didintrjl/.</p>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample.int</a></span><span class="op">(</span><span class="fl">1e+06</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  notyet <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  hc <span class="op">=</span> <span class="st">"hc3"</span></span>
+<span>  hc <span class="op">=</span> <span class="st">"hc3"</span>,</span>
+<span>  truejack <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -191,6 +192,11 @@ treated states as controls.</p></dd>
 <dt id="arg-hc">hc<a class="anchor" aria-label="anchor" href="#arg-hc"></a></dt>
 <dd><p>Heteroskedasticity-consistent covariance matrix estimator.
 One of <code>"hc0"</code>, <code>"hc1"</code>, <code>"hc2"</code>, <code>"hc3"</code>, <code>"hc4"</code>.</p></dd>
+
+
+<dt id="arg-truejack">truejack<a class="anchor" aria-label="anchor" href="#arg-truejack"></a></dt>
+<dd><p>Logical value, if <code>TRUE</code>, re-estimates the DID-INT
+model from the first step (if <code>ccc</code> option is not <code>"int"</code> or "<code>state</code>").</p></dd>
 
 </dl></div>
     <div class="section level2">
