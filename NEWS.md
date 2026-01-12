@@ -1,3 +1,7 @@
+# didintrjl 0.2.1
+
+* Added the `truejack` option, which re-estimates the DID-INT model from step 1 while calculating the jackknife if set to `TRUE`.
+
 # didintrjl 0.2.0
 
 * Added arguments `window` and `mingroup` to the `plot()` method for `DiDIntPlotObj`. These new arguments allow the user to specify the range of periods plotted, and the points for which they want the confidence band to appear in the case of events plots. These new arguments require updating the DiDInt.jl package for Julia to v0.6.15.

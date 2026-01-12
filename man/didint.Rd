@@ -26,7 +26,8 @@ didint(
   verbose = TRUE,
   seed = sample.int(1e+06, 1),
   notyet = NULL,
-  hc = "hc3"
+  hc = "hc3",
+  truejack = FALSE
 )
 }
 \arguments{
@@ -90,6 +91,9 @@ treated states as controls.}
 
 \item{hc}{Heteroskedasticity-consistent covariance matrix estimator.
 One of \code{"hc0"}, \code{"hc1"}, \code{"hc2"}, \code{"hc3"}, \code{"hc4"}.}
+
+\item{truejack}{Logical value, if \code{TRUE}, re-estimates the DID-INT
+model from the first step (if \code{ccc} option is not \code{"int"} or "\code{state}").}
 }
 \value{
 A DiDIntObj
