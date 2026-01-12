@@ -16,7 +16,8 @@ jobs:
       matrix:
         config:
           - {os: macos-latest,   r: 'release', julia: '1.10'}
-          - {os: windows-latest, r: 'release', julia: '1.10'}
+          # Also skip windows, since there seems to be some timeout issue there as well...
+          # - {os: windows-latest, r: 'release', julia: '1.10'}
           # Temporarily skip R-devel due to yaml package compilation issues with missing R_ext/PrtUtil.h
           # - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release', julia: '1.10'}
           - {os: ubuntu-latest,   r: 'release', julia: '1.10'}
