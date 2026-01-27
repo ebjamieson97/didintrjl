@@ -119,6 +119,9 @@ didint <- function(
   DiDInt <- .didintrjl_setup()
   didintrjl <- DiDInt$didint
 
+  # Force data to dataframe
+  data <- as.data.frame(data)
+
   # Ensure that the state column and treated_states are strings
   data[, state] <- as.character(data[, state])
   treated_states <- as.character(treated_states)

@@ -1,6 +1,6 @@
 Package: didintrjl
 Title: Intersection Difference-in-Differences
-Version: 0.2.1
+Version: 0.2.2
 Authors@R: 
     person("Eric", "Jamieson", email = "ericbrucejamieson@gmail.com", role = c("aut", "cre", "cph"))
 Description: A wrapper for the Julia package 'DiDInt.jl' <https://ebjamieson97.github.io/DiDInt.jl/dev/>
