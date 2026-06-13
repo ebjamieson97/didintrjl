@@ -29,7 +29,7 @@ didint_plot(
   freq_multiplier = 1,
   start_date = NULL,
   end_date = NULL,
-  hc = "hc3"
+  hc = "hc1"
 )
 ```
 
@@ -155,9 +155,3 @@ Karim & Webb (2025). *Good Controls Gone Bad: Difference-in-Differences
 with Covariates*. <https://arxiv.org/abs/2412.14447>
 
 ## Examples
-
-``` r
-file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
-df <- utils::read.csv(file_path)
-#didint_plot()
-```

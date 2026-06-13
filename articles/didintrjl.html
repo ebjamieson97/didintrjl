@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>didintrjl • didintrjl</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="didintrjl">
 </head>
@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">didintrjl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,151 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ebjamieson97.github.io/didintrjl/">didintrjl</a></span><span class="op">)</span></span></code></pre></div>
-  </main>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
+<p>The <strong>didintrjl</strong> package is an R wrapper for the Julia
+package <a href="https://ebjamieson97.github.io/DiDInt.jl/stable/" class="external-link">DiDInt.jl</a>,
+which implements intersection difference-in-differences (DID-INT); a
+method developed by <a href="https://arxiv.org/abs/2412.14447" class="external-link">Karim
+&amp; Webb (2025)</a>. DID-INT allows for unbiased estimation of the
+average treatment effect on the treated (ATT) when the common causal
+covariates (CCC) assumption is violated; that is, when the effects of
+covariates on the outcome of interest may vary by state, time, or both.
+It supports common or staggered adoption.</p>
+<p>Because <strong>didintrjl</strong> interfaces with Julia via <a href="https://github.com/stefan-m-lenz/JuliaConnectoR" class="external-link">JuliaConnectoR</a>,
+the examples below require a working Julia installation with
+<strong>DiDInt.jl</strong> available (see the README for installation
+details). They are evaluated only when <code><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaSetupOk.html" class="external-link">juliaSetupOk()</a></code>
+returns <code>TRUE</code> and the <strong>DiDInt.jl</strong> package can
+be found.</p>
+<p>The two functions are <code><a href="../reference/didint.html">didint()</a></code>, which estimates ATT, and
+<code><a href="../reference/didint_plot.html">didint_plot()</a></code>, which produces parallel trends or event
+study plots.</p>
+</div>
+<div class="section level2">
+<h2 id="estimation">1. Estimation<a class="anchor" aria-label="anchor" href="#estimation"></a>
+</h2>
+<p><code><a href="../reference/didint.html">didint()</a></code> returns an object of class
+<code>DiDIntObj</code> with three S3 methods: <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>,
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, and <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>. Each accepts a
+<code>level</code> argument of either <code>"agg"</code> or
+<code>"sub"</code> to distinguish aggregate from sub-aggregate results.
+In a staggered adoption setting with several treatment times,
+<code>level = "sub"</code> returns results for the distinct treatment
+times, whereas <code>level = "agg"</code> returns the aggregated
+results.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load the example data</span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"merit.csv"</span>, package <span class="op">=</span> <span class="st">"didintrjl"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Estimate the ATT</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/didint.html">didint</a></span><span class="op">(</span><span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>              treated_states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">71</span>, <span class="fl">58</span>, <span class="fl">64</span>, <span class="fl">59</span>, <span class="fl">85</span>, <span class="fl">57</span>, <span class="fl">72</span>, <span class="fl">61</span>, <span class="fl">34</span>, <span class="fl">88</span><span class="op">)</span>,</span>
+<span>              treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">1996</span>, <span class="fl">1997</span>, <span class="fl">1997</span>, <span class="fl">1998</span>,</span>
+<span>                                  <span class="fl">1998</span>, <span class="fl">1999</span>, <span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Model Specification: Two-way DID-INT</span></span>
+<span><span class="co">#&gt;   Weighting: both</span></span>
+<span><span class="co">#&gt;   Aggregation: cohort</span></span>
+<span><span class="co">#&gt;   Period Length: 1 year</span></span>
+<span><span class="co">#&gt;   First Period: 1989</span></span>
+<span><span class="co">#&gt;   Last Period: 2000</span></span>
+<span><span class="co">#&gt;   Permutations: 999</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Aggregate Results:</span></span>
+<span><span class="co">#&gt;         ATT Std. Error     p-value RI p-value Jackknife SE Jackknife p-value</span></span>
+<span><span class="co">#&gt;  0.04582252 0.01159691 0.007526681  0.1391391   0.01520398        0.00404305</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Subaggregate Results:</span></span>
+<span><span class="co">#&gt; Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------- </span></span>
+<span><span class="co">#&gt; 1991-01-01               0.0529     0.0221     0.0172     0.5005         NA         NA     0.2018</span></span>
+<span><span class="co">#&gt; 1993-01-01               0.0236     0.0166     0.1554     0.6937         NA         NA     0.1915</span></span>
+<span><span class="co">#&gt; 1996-01-01               0.0564     0.0242     0.0208     0.4945         NA         NA     0.0757</span></span>
+<span><span class="co">#&gt; 1997-01-01               0.0711     0.0230     0.0023     0.2062     0.0257     0.0080     0.3211</span></span>
+<span><span class="co">#&gt; 1998-01-01               0.0485     0.0329     0.1427     0.4585     0.0838     0.5650     0.1086</span></span>
+<span><span class="co">#&gt; 1999-01-01               0.0120     0.0150     0.4235     0.8759         NA         NA     0.0355</span></span>
+<span><span class="co">#&gt; 2000-01-01              -0.0331     0.0320     0.3081     0.6847     0.0966     0.7336     0.0658</span></span>
+<span></span>
+<span><span class="co"># Aggregate and sub-aggregate results can also be accessed directly</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">agg</span></span>
+<span><span class="co">#&gt;          att         se        pval   ri_pval  jknife_se jknife_pval</span></span>
+<span><span class="co">#&gt; 1 0.04582252 0.01159691 0.007526681 0.1391391 0.01520398  0.00404305</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">sub</span></span>
+<span><span class="co">#&gt;        group         att         se        pval   ri_pval  jknife_se</span></span>
+<span><span class="co">#&gt; 1 1991-01-01  0.05290996 0.02211803 0.017190246 0.5005005         NA</span></span>
+<span><span class="co">#&gt; 2 1993-01-01  0.02359277 0.01657012 0.155433859 0.6936937         NA</span></span>
+<span><span class="co">#&gt; 3 1996-01-01  0.05643511 0.02422739 0.020797631 0.4944945         NA</span></span>
+<span><span class="co">#&gt; 4 1997-01-01  0.07111675 0.02296333 0.002287606 0.2062062 0.02574683</span></span>
+<span><span class="co">#&gt; 5 1998-01-01  0.04854361 0.03290810 0.142653420 0.4584585 0.08378975</span></span>
+<span><span class="co">#&gt; 6 1999-01-01  0.01204398 0.01497416 0.423539176 0.8758759         NA</span></span>
+<span><span class="co">#&gt; 7 2000-01-01 -0.03306235 0.03203587 0.308102279 0.6846847 0.09660284</span></span>
+<span><span class="co">#&gt;   jknife_pval    weights</span></span>
+<span><span class="co">#&gt; 1          NA 0.20179564</span></span>
+<span><span class="co">#&gt; 2          NA 0.19153484</span></span>
+<span><span class="co">#&gt; 3          NA 0.07567336</span></span>
+<span><span class="co">#&gt; 4 0.008012064 0.32107738</span></span>
+<span><span class="co">#&gt; 5 0.564954173 0.10859342</span></span>
+<span><span class="co">#&gt; 6          NA 0.03548525</span></span>
+<span><span class="co">#&gt; 7 0.733597087 0.06584010</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="plotting">2. Plotting<a class="anchor" aria-label="anchor" href="#plotting"></a>
+</h2>
+<p><code><a href="../reference/didint_plot.html">didint_plot()</a></code> returns an object of class
+<code>DiDIntPlotObj</code> with one S3 method: <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. It
+can produce either an event study plot (<code>event = TRUE</code>) or a
+parallel trends plot (the default). The object also stores the
+underlying plotting data in <code>DiDIntPlotObj$data</code>, so you can
+build your own customized plots if you wish.</p>
+<div class="section level3">
+<h3 id="event-study-plot">2.1 Event Study Plot<a class="anchor" aria-label="anchor" href="#event-study-plot"></a>
+</h3>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res_event</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/didint_plot.html">didint_plot</a></span><span class="op">(</span><span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df</span>, event <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                         treated_states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">71</span>, <span class="fl">58</span>, <span class="fl">64</span>, <span class="fl">59</span>, <span class="fl">85</span>, <span class="fl">57</span>,</span>
+<span>                                            <span class="fl">72</span>, <span class="fl">61</span>, <span class="fl">34</span>, <span class="fl">88</span><span class="op">)</span>,</span>
+<span>                         treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">1996</span>, <span class="fl">1997</span>, <span class="fl">1997</span>,</span>
+<span>                                             <span class="fl">1998</span>, <span class="fl">1998</span>, <span class="fl">1999</span>, <span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span>,</span>
+<span>                         covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_event</span><span class="op">)</span></span></code></pre></div>
+<p><img src="didintrjl_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3">
+<h3 id="parallel-trends-plot">2.2 Parallel Trends Plot<a class="anchor" aria-label="anchor" href="#parallel-trends-plot"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Using a subset of states to keep the plot readable</span></span>
+<span><span class="va">df_sub</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="va">df</span><span class="op">$</span><span class="va">state</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">71</span>, <span class="fl">58</span>, <span class="fl">11</span>, <span class="fl">34</span>, <span class="fl">14</span><span class="op">)</span>, <span class="op">]</span></span>
+<span><span class="va">res_parallel</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/didint_plot.html">didint_plot</a></span><span class="op">(</span><span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df_sub</span>,</span>
+<span>                            treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">2000</span><span class="op">)</span>,</span>
+<span>                            covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_parallel</span><span class="op">)</span></span></code></pre></div>
+<p><img src="didintrjl_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="100%" style="display: block; margin: auto;"></p>
+<p>For both plot types you can choose which combination of plots to view
+via the <code>ccc</code> argument,
+e.g. <code>plot(res_parallel, ccc = "state")</code> or
+<code>plot(res_event, ccc = c("none", "hom", "int"))</code>. The
+plotting data itself is available via <code>res_parallel$data</code> and
+<code>res_event$data</code>.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>You can access citations by calling
+<code>citation("didintrjl")</code>.</p>
+<p>Karim, S. and Webb, M. D. 2025. Good Controls Gone Bad:
+Difference-in-Differences with Covariates. arXiv preprint
+arXiv:2412.14447. <a href="https://arxiv.org/abs/2412.14447" class="external-link">https://arxiv.org/abs/2412.14447</a></p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

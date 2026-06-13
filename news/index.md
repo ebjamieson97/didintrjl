@@ -1,5 +1,14 @@
 # Changelog
 
+## didintrjl 0.2.3
+
+- Added the `edgecase` option for
+  [`didint()`](https://ebjamieson97.github.io/didintrjl/reference/didint.md)
+  to toggle computation of edge case standard errors from saturated Step
+  3 regressions (see
+  <https://ebjamieson97.github.io/DiDInt.jl/stable/details/> for more
+  details).
+
 ## didintrjl 0.2.1
 
 - Added the `truejack` option, which re-estimates the DID-INT model from

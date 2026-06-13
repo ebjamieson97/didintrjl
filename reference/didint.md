@@ -4,9 +4,11 @@
 (ATT) using intersection difference-in-differences developped by Karim &
 Webb (2025). The method adjusts for covariates that may vary across
 states, over time, or jointly by state and time. This function is an R
-wrapper around the Julia implementation provided in the Didint.jl
-package. For all the details visit the didintrjl documentation site:
-https://ebjamieson97.github.io/didintrjl/.
+wrapper around the Julia implementation provided in the DiDInt.jl
+package. For more details on the didintrjl wrapper, visit the didintrjl
+documentation site: https://ebjamieson97.github.io/didintrjl/. For more
+details on the backend implementation, see:
+https://ebjamieson97.github.io/DiDInt.jl/stable/
 
 ## Usage
 
@@ -33,8 +35,9 @@ didint(
   verbose = TRUE,
   seed = sample.int(1e+06, 1),
   notyet = NULL,
-  hc = "hc3",
-  truejack = FALSE
+  hc = "hc1",
+  truejack = FALSE,
+  edgecase = FALSE
 )
 ```
 
@@ -148,6 +151,13 @@ didint(
   Logical value, if `TRUE`, re-estimates the DID-INT model from the
   first step (if `ccc` option is not `"int"` or "`state`").
 
+- edgecase:
+
+  Logical value, if `TRUE` computes any edge case standard errors from
+  saturated Step 3 regressions - see the DiDInt.jl documentation site
+  (https://ebjamieson97.github.io/DiDInt.jl/stable/) for more details.
+  Defaults to `FALSE.`
+
 ## Value
 
 A DiDIntObj
@@ -167,7 +177,8 @@ Period grids for staggered adoption are constructed automatically, based
 on the inputted data. Otherwise, the period grid can be created manually
 using the arguments `freq`, `freq_multiplier`, `start_date`, and
 `end_date`. More information on this process can be seen on the
-didintrjl documentation site: https://ebjamieson97.github.io/didintrjl/.
+DiDInt.jl documentation site:
+https://ebjamieson97.github.io/DiDInt.jl/stable/.
 
 ## References
 
@@ -179,9 +190,3 @@ difference-in-differences with few treated clusters*.
 [doi:10.1016/j.jeconom.2020.04.024](https://doi.org/10.1016/j.jeconom.2020.04.024)
 
 ## Examples
-
-``` r
-file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
-df <- utils::read.csv(file_path)
-#didint()
-```
