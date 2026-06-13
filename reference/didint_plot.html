@@ -200,7 +200,27 @@ https://ebjamieson97.github.io/didintrjl/.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">JuliaConnectoR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaSetupOk.html" class="external-link">juliaSetupOk</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span></span>
+<span class="r-in"><span>    <span class="fu">JuliaConnectoR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaEval.html" class="external-link">juliaEval</a></span><span class="op">(</span><span class="st">'using Pkg;</span></span></span>
+<span class="r-in"><span><span class="st">     _didint_pkgs = filter(p -&gt; p.second.name == "DiDInt", Pkg.dependencies());</span></span></span>
+<span class="r-in"><span><span class="st">     !isempty(_didint_pkgs) &amp;&amp; first(values(_didint_pkgs)).version &gt;= v"0.9.6"'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span> <span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"merit.csv"</span>, package <span class="op">=</span> <span class="st">"didintrjl"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="va">res_event</span> <span class="op">&lt;-</span> <span class="fu">didint_plot</span><span class="op">(</span></span></span>
+<span class="r-in"><span>   <span class="st">"coll"</span>, <span class="st">"state"</span>, <span class="st">"year"</span>, <span class="va">df</span>, event <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
+<span class="r-in"><span>   treated_states <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">71</span>, <span class="fl">58</span>, <span class="fl">64</span>, <span class="fl">59</span>, <span class="fl">85</span>, <span class="fl">57</span>, <span class="fl">72</span>, <span class="fl">61</span>, <span class="fl">34</span>, <span class="fl">88</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1991</span>, <span class="fl">1993</span>, <span class="fl">1996</span>, <span class="fl">1997</span>, <span class="fl">1997</span>, <span class="fl">1998</span>, <span class="fl">1998</span>, <span class="fl">1999</span>,</span></span>
+<span class="r-in"><span>                       <span class="fl">2000</span>, <span class="fl">2000</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>   covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="op">)</span></span></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_event</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia ...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Package "Tables.jl" (version &gt;= 1.0) is required. Installing ...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia ...</span>
+<span class="r-plt img"><img src="didint_plot-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>

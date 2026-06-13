@@ -155,3 +155,25 @@ Karim & Webb (2025). *Good Controls Gone Bad: Difference-in-Differences
 with Covariates*. <https://arxiv.org/abs/2412.14447>
 
 ## Examples
+
+``` r
+if (JuliaConnectoR::juliaSetupOk() &&
+    JuliaConnectoR::juliaEval('using Pkg;
+     _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies());
+     !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"')) {
+ file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
+ df <- utils::read.csv(file_path)
+ res_event <- didint_plot(
+   "coll", "state", "year", df, event = TRUE,
+   treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88),
+   treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999,
+                       2000, 2000),
+   covariates = c("asian", "black", "male")
+ )
+ plot(res_event)
+}
+#> Starting Julia ...
+#> Package "Tables.jl" (version >= 1.0) is required. Installing ...
+#> Starting Julia ...
+
+```
