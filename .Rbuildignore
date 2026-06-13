@@ -8,3 +8,5 @@
 ^docs$
 ^pkgdown$
 ^didintrjl_meta_test\.r$
+^doc$
+^Meta$

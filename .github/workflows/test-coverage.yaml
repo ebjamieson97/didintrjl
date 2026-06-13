@@ -35,7 +35,7 @@ jobs:
       # Install DiDInt.jl
       - name: Install DiDInt.jl
         run: |
-          julia -e 'using Pkg; Pkg.add(url="https://github.com/ebjamieson97/DiDInt.jl")'
+          julia -e 'using Pkg; Pkg.add("DiDInt")'
 
       - name: Test coverage
         run: |

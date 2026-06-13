@@ -17,3 +17,113 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(didintrjl)
 ```
+
+```{r, include = FALSE}
+# Only run the examples below if Julia can be set up on this machine.
+# (DiDInt.jl must also be installed; see the README.)
+knitr::opts_chunk$set(
+  eval = requireNamespace("JuliaConnectoR", quietly = TRUE) &&
+    JuliaConnectoR::juliaSetupOk() &&
+    JuliaConnectoR::juliaEval('using Pkg; _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies()); !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"') #nolint
+)
+```
+
+## Introduction
+
+The **didintrjl** package is an R wrapper for the Julia package
+[DiDInt.jl](https://ebjamieson97.github.io/DiDInt.jl/stable/), which implements
+intersection difference-in-differences (DID-INT); a method developed by
+[Karim & Webb (2025)](https://arxiv.org/abs/2412.14447). DID-INT allows for
+unbiased estimation of the average treatment effect on the treated (ATT) when
+the common causal covariates (CCC) assumption is violated; that is, when the
+effects of covariates on the outcome of interest may vary by state, time, or
+both. It supports common or staggered adoption.
+
+Because **didintrjl** interfaces with Julia via
+[JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR), the examples
+below require a working Julia installation with **DiDInt.jl** available (see the
+README for installation details). They are evaluated only when `juliaSetupOk()`
+returns `TRUE` and the **DiDInt.jl** package can be found.
+
+The two functions are `didint()`, which estimates ATT, and
+`didint_plot()`, which produces parallel trends or event study plots.
+
+## 1. Estimation
+
+`didint()` returns an object of class `DiDIntObj` with three S3 methods:
+`print()`, `summary()`, and `coef()`. Each accepts a `level` argument of
+either `"agg"` or `"sub"` to distinguish aggregate from sub-aggregate results.
+In a staggered adoption setting with several treatment times, `level = "sub"`
+returns results for the distinct treatment times, whereas `level = "agg"`
+returns the aggregated results.
+
+```{r}
+# Load the example data
+df <- read.csv(system.file("extdata", "merit.csv", package = "didintrjl"))
+
+# Estimate the ATT
+res <- didint("coll", "state", "year", df, verbose = FALSE,
+              treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88),
+              treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998,
+                                  1998, 1999, 2000, 2000))
+
+summary(res)
+
+# Aggregate and sub-aggregate results can also be accessed directly
+res$agg
+res$sub
+```
+
+## 2. Plotting
+
+`didint_plot()` returns an object of class `DiDIntPlotObj` with one S3 method:
+`plot()`. It can produce either an event study plot (`event = TRUE`) or a
+parallel trends plot (the default). The object also stores the underlying
+plotting data in `DiDIntPlotObj$data`, so you can build your own customized
+plots if you wish.
+
+### 2.1 Event Study Plot
+
+```{r, fig.width = 9, fig.height = 10, out.width = "100%", fig.align = "center"}
+res_event <- didint_plot("coll", "state", "year", df, event = TRUE,
+                         treated_states = c(71, 58, 64, 59, 85, 57,
+                                            72, 61, 34, 88),
+                         treatment_times = c(1991, 1993, 1996, 1997, 1997,
+                                             1998, 1998, 1999, 2000, 2000),
+                         covariates = c("asian", "black", "male"))
+
+plot(res_event)
+```
+
+### 2.2 Parallel Trends Plot
+
+```{r, fig.width = 8, fig.height = 6, out.width = "100%", fig.align = "center"}
+# Using a subset of states to keep the plot readable
+df_sub <- df[df$state %in% c(71, 58, 11, 34, 14), ]
+res_parallel <- didint_plot("coll", "state", "year", df_sub,
+                            treatment_times = c(1991, 1993, 2000),
+                            covariates = c("asian", "black", "male"))
+
+plot(res_parallel)
+```
+
+For both plot types you can choose which combination of plots to view via the
+`ccc` argument, e.g. `plot(res_parallel, ccc = "state")` or
+`plot(res_event, ccc = c("none", "hom", "int"))`. The plotting data itself is
+available via `res_parallel$data` and `res_event$data`.
+
+```{r, include = FALSE}
+# Shut down the Julia session started during the examples.
+if (requireNamespace("JuliaConnectoR", quietly = TRUE) &&
+    JuliaConnectoR::juliaSetupOk()) {
+  JuliaConnectoR:::stopJulia()
+}
+```
+
+## References
+
+You can access citations by calling `citation("didintrjl")`.
+
+Karim, S. and Webb, M. D. 2025. Good Controls Gone Bad: Difference-in-Differences
+with Covariates. arXiv preprint arXiv:2412.14447.
+[https://arxiv.org/abs/2412.14447](https://arxiv.org/abs/2412.14447)

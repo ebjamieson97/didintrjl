@@ -7,14 +7,12 @@ on:
   release:
     types: [published]
   workflow_dispatch:
-
 name: pkgdown.yaml
-
 permissions: read-all
-
 jobs:
   pkgdown:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     # Only restrict concurrency for non-PR jobs
     concurrency:
       group: pkgdown-${{ github.event_name != 'pull_request' || github.run_id }}
@@ -31,10 +29,42 @@ jobs:
         with:
           use-public-rspm: true
 
+      # Setup Julia BEFORE caching (like JuliaConnectoR / R-CMD-check does)
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1.10'
+
+      # Cache Julia packages separately with a stable key
+      - name: Cache Julia packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.julia/artifacts/
+            ~/.julia/packages/
+            ~/.julia/compiled/
+          key: julia-1.10-${{ runner.os }}-v1
+          restore-keys: |
+            julia-1.10-${{ runner.os }}-
+
+      # Install DiDInt.jl with explicit precompilation
+      - name: Install DiDInt.jl
+        run: |
+          julia -e 'using Pkg; Pkg.add("DiDInt"); Pkg.precompile()'
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
+
+      # (Optional) sanity-check that JuliaConnectoR picks up the right Julia
+      - name: Make sure JuliaConnectoR will pick up the right Julia version
+        run: |
+          JC_VER=$(Rscript -e "cat(JuliaConnectoR:::getJuliaVersionViaCmd())");
+          if [[ ! $JC_VER == "1.10"* ]]; then
+            echo "Julia version is $JC_VER, expected 1.10";
+            exit 1;
+          fi
+        shell: bash
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

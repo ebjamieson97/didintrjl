@@ -1,0 +1,33 @@
+note <- sprintf("R package version %s", meta$Version)
+
+bibentry(bibtype = "Article",
+         title = "Good Controls Gone Bad: Difference-in-Differences with Covariates",
+         author = c(person("Sunny", "Karim"),
+                    person("Matthew D.", "Webb")),
+         year = "2025",
+         journal = "arXiv preprint arXiv:2412.14447",
+         url = "https://arxiv.org/abs/2412.14447",
+         header = "To cite the DID-INT paper, please use:\n"
+)
+
+bibentry(bibtype = "Article",
+         title = "Randomization inference for difference-in-differences with few treated clusters",
+         author = c(person("James G.", "MacKinnon"),
+                    person("Matthew D.", "Webb")),
+         year = "2020",
+         journal = "Journal of Econometrics",
+         volume = "218",
+         number = "2",
+         pages = "435-450",
+         url = "https://doi.org/10.1016/j.jeconom.2020.04.024",
+         header = "If you are using randomization inference p-values, please also cite:\n"
+)
+
+bibentry(bibtype = "Misc",
+         title = "didintrjl: Intersection difference-in-differences in R",
+         author = person("Eric", "Jamieson"),
+         year = "2026",
+         note = note,
+         url = "https://github.com/ebjamieson97/didintrjl",
+         header = "To cite the didintrjl software package:\n"
+)

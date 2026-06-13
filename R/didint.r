@@ -4,9 +4,11 @@
 #' using intersection difference-in-differences developped by Karim & Webb
 #' (2025). The method adjusts for covariates that may vary across states,
 #' over time, or jointly by state and time. This function is an R wrapper
-#' around the Julia implementation provided in the \pkg{Didint.jl} package.
-#' For all the details visit the didintrjl documentation site:
-#' https://ebjamieson97.github.io/didintrjl/.
+#' around the Julia implementation provided in the \pkg{DiDInt.jl} package.
+#' For more details on the \pkg{didintrjl} wrapper, visit the didintrjl
+#' documentation site: https://ebjamieson97.github.io/didintrjl/. For more
+#' details on the backend implementation, see:
+#' https://ebjamieson97.github.io/DiDInt.jl/stable/
 #'
 #' @details
 #' The arguments `treated_states` and `treatment_times` must be supplied such
@@ -21,8 +23,8 @@
 #' Period grids for staggered adoption are constructed automatically,
 #' based on the inputted data. Otherwise, the period grid can be created
 #' manually using the arguments `freq`, `freq_multiplier`, `start_date`,
-#' and `end_date`. More information on this process can be seen on the didintrjl
-#' documentation site: https://ebjamieson97.github.io/didintrjl/.
+#' and `end_date`. More information on this process can be seen on the DiDInt.jl
+#' documentation site: https://ebjamieson97.github.io/DiDInt.jl/stable/.
 #'
 #' @param outcome A string giving the column name of the outcome variable.
 #' @param state A string giving the column identifying states. The state column
@@ -69,15 +71,29 @@
 #'   One of `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"`.
 #' @param truejack Logical value, if `TRUE`, re-estimates the DID-INT
 #'   model from the first step (if `ccc` option is not `"int"` or "`state`").
+#' @param edgecase Logical value, if `TRUE` computes any edge case standard
+#'  errors from saturated Step 3 regressions - see the DiDInt.jl documentation
+#'  site (https://ebjamieson97.github.io/DiDInt.jl/stable/) for more details.
+#'  Defaults to `FALSE.`
 #'
 #' @returns
 #' A DiDIntObj
 #'
 #' @examples
-#' file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
-#' df <- utils::read.csv(file_path)
-#' #didint()
-#'
+#' #' if (JuliaConnectoR::juliaSetupOk() &&
+#'     JuliaConnectoR::juliaEval('using Pkg; _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies()); !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"') #nolint
+#' ) {
+#'  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
+#'  df <- utils::read.csv(file_path)
+#'  res <- didint("coll", "state", "year", df, verbose = FALSE,
+#'                treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88), nperm = 399,
+#'                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000)
+#'  summary(res)
+#' }
+#' \dontshow{
+#' JuliaConnectoR:::stopJulia()
+#' }
+#' 
 #' @references
 #' Karim & Webb (2025).
 #' *Good Controls Gone Bad: Difference-in-Differences with Covariates*.
@@ -111,8 +127,9 @@ didint <- function(
   verbose = TRUE,
   seed = sample.int(1000000, 1),
   notyet = NULL,
-  hc = "hc3",
-  truejack = FALSE
+  hc = "hc1",
+  truejack = FALSE,
+  edgecase = FALSE
 ) {
 
   # Import DiDInt
@@ -150,7 +167,8 @@ didint <- function(
                       notyet = notyet,
                       hc = hc,
                       wrapper = "r",
-                      truejack = truejack)
+                      truejack = truejack,
+                      edgecase = edgecase)
   result <- as.data.frame(result)
 
   # Rename any of the sub-aggregate att columns for ease of conversion

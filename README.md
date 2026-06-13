@@ -13,7 +13,7 @@ coverage](https://codecov.io/gh/ebjamieson97/didintrjl/graph/badge.svg)](https:/
 <!-- badges: end -->
 
 **didintrjl** is an R wrapper for the Julia package
-[DiDInt.jl](https://ebjamieson97.github.io/DiDInt.jl/dev/), which
+[DiDInt.jl](https://ebjamieson97.github.io/DiDInt.jl/stable/), which
 implements intersection difference-in-differences (DID-INT), a method
 developed by [Karim & Webb (2025)](https://arxiv.org/abs/2412.14447).
 DID-INT allows for unbiased estimation of the average effect of
@@ -21,6 +21,13 @@ treatment on the treated (ATT) in cases when the common causal
 covariates (CCC) assumption is violated.
 
 ## Installation
+
+The stable [CRAN](https://cran.r-project.org/package=didintrjl) version
+of didintrjl can be installed via:
+
+``` r
+install.packages("didintrjl")
+```
 
 You can install the development version of didintrjl with:
 
@@ -30,21 +37,25 @@ remotes::install_github("ebjamieson97/didintrjl")
 ```
 
 Since **didintrjl** is a wrapper for the Julia pacakage
-[DiDInt.jl](https://ebjamieson97.github.io/DiDInt.jl/dev/), you may need
-to update the Julia package itself from time to time. You can do this
+[DiDInt.jl](https://ebjamieson97.github.io/DiDInt.jl/dev/), you will
+need to ensure that **DiDInt.jl** is installed and you may need to
+update the Julia package itself from time to time. You can do this
 directly from R using the brilliant
 [JuliaConnectoR](https://github.com/stefan-m-lenz/JuliaConnectoR) which
 is the package that **didintrjl** uses to interface with Julia.
 
 ``` r
 library(JuliaConnectoR)
-juliaEval('using Pkg; Pkg.add(url="https://github.com/ebjamieson97/DiDInt.jl")')
+juliaEval('using Pkg; Pkg.add("DiDInt")')
+
+# Or to update:
+juliaEval('using Pkg; Pkg.update("DiDInt")')
 ```
 
 ## Requirements
 
 - Julia \>= 1.10.0
-- DiDInt.jl = v0.6.15
+- [DiDInt.jl](https://github.com/ebjamieson97/DiDInt.jl) \>= v0.9.6
 
 ## Examples
 
@@ -82,41 +93,41 @@ summary(res)
 #>   Permutations: 999
 #> 
 #> Aggregate Results:
-#>         ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value
-#>  0.04582252 0.01440005 0.01902511  0.1031031   0.01333186         0.0138506
+#>         ATT Std. Error     p-value RI p-value Jackknife SE Jackknife p-value
+#>  0.04582252 0.01159691 0.007526681  0.1281281   0.01520398        0.00404305
 #> 
 #> Subaggregate Results:
 #> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
 #> -------------------------------------------------------------------------------------------------------------- 
-#> 1991-01-01               0.0529     0.0244     0.0307     0.4945     0.0244     0.0305     0.2018
-#> 1993-01-01               0.0236     0.0186     0.2044     0.6877     0.0185     0.2037     0.1915
-#> 1996-01-01               0.0564     0.0295     0.0572     0.4484     0.0294     0.0566     0.0757
-#> 1997-01-01               0.0711     0.0271     0.0094     0.2112     0.0270     0.0092     0.3211
-#> 1998-01-01               0.0485     0.0389     0.2146     0.4685     0.0388     0.2128     0.1086
-#> 1999-01-01               0.0120     0.0207     0.5629     0.8809     0.0206     0.5606     0.0355
-#> 2000-01-01              -0.0331     0.0976     0.7364     0.6997     0.0964     0.7334     0.0658
+#> 1991-01-01               0.0529     0.0221     0.0172     0.5245         NA         NA     0.2018
+#> 1993-01-01               0.0236     0.0166     0.1554     0.6947         NA         NA     0.1915
+#> 1996-01-01               0.0564     0.0242     0.0208     0.4985         NA         NA     0.0757
+#> 1997-01-01               0.0711     0.0230     0.0023     0.2002     0.0257     0.0080     0.3211
+#> 1998-01-01               0.0485     0.0329     0.1427     0.4715     0.0838     0.5650     0.1086
+#> 1999-01-01               0.0120     0.0150     0.4235     0.8809         NA         NA     0.0355
+#> 2000-01-01              -0.0331     0.0320     0.3081     0.7107     0.0966     0.7336     0.0658
 
 # The aggregate and sub-aggregate results can also be accessed via
 res$agg
-#>          att         se       pval   ri_pval  jknife_se jknife_pval
-#> 1 0.04582252 0.01440005 0.01902511 0.1031031 0.01333186   0.0138506
+#>          att         se        pval   ri_pval  jknife_se jknife_pval
+#> 1 0.04582252 0.01159691 0.007526681 0.1281281 0.01520398  0.00404305
 res$sub
 #>        group         att         se        pval   ri_pval  jknife_se
-#> 1 1991-01-01  0.05290996 0.02439807 0.030675438 0.4944945 0.02436901
-#> 2 1993-01-01  0.02359277 0.01855183 0.204356636 0.6876877 0.01852420
-#> 3 1996-01-01  0.05643511 0.02950858 0.057186077 0.4484484 0.02943824
-#> 4 1997-01-01  0.07111675 0.02705265 0.009353063 0.2112112 0.02697389
-#> 5 1998-01-01  0.04854361 0.03891876 0.214580478 0.4684685 0.03876762
-#> 6 1999-01-01  0.01204398 0.02073484 0.562929773 0.8808809 0.02061105
-#> 7 2000-01-01 -0.03306235 0.09756409 0.736430972 0.6996997 0.09642295
+#> 1 1991-01-01  0.05290996 0.02211803 0.017190246 0.5245245         NA
+#> 2 1993-01-01  0.02359277 0.01657012 0.155433859 0.6946947         NA
+#> 3 1996-01-01  0.05643511 0.02422739 0.020797631 0.4984985         NA
+#> 4 1997-01-01  0.07111675 0.02296333 0.002287606 0.2002002 0.02574683
+#> 5 1998-01-01  0.04854361 0.03290810 0.142653420 0.4714715 0.08378975
+#> 6 1999-01-01  0.01204398 0.01497416 0.423539176 0.8808809         NA
+#> 7 2000-01-01 -0.03306235 0.03203587 0.308102279 0.7107107 0.09660284
 #>   jknife_pval    weights
-#> 1 0.030478102 0.20179564
-#> 2 0.203684129 0.19153484
-#> 3 0.056599508 0.07567336
-#> 4 0.009152352 0.32107738
-#> 5 0.212809403 0.10859342
-#> 6 0.560591878 0.03548525
-#> 7 0.733434003 0.06584010
+#> 1          NA 0.20179564
+#> 2          NA 0.19153484
+#> 3          NA 0.07567336
+#> 4 0.008012064 0.32107738
+#> 5 0.564954173 0.10859342
+#> 6          NA 0.03548525
+#> 7 0.733597087 0.06584010
 ```
 
 ### `didint_plot()`
@@ -137,7 +148,6 @@ res_event <- didint_plot(
                       2000, 2000),
   covariates = c("asian", "black", "male")
 )
-#>     Demean Variables: [=>                               ]  1/121
 
 plot(res_event)
 ```
@@ -189,13 +199,13 @@ head(res_parallel$data)
 #> 5    11 1993 0.6324456 hom      4       1989           NA        1 year
 #> 6    11 1994 0.4139365 hom      5       1989           NA        1 year
 head(res_event$data)
-#>   ccc time_since_treatment         y         se    ci_lower  ci_upper ngroup
-#> 1 hom                  -11 0.5282917 0.24299986 -2.55931420 3.6158976      2
-#> 2 hom                  -10 0.4476755 0.11609859 -0.05185644 0.9472074      3
-#> 3 hom                   -9 0.4708055 0.02783482  0.39352366 0.5480874      5
-#> 4 hom                   -8 0.4529724 0.03014100  0.37922005 0.5267248      7
-#> 5 hom                   -7 0.4970207 0.03668203  0.41028149 0.5837599      8
-#> 6 hom                   -6 0.4832311 0.02483194  0.42451293 0.5419493      8
+#>   ccc time_since_treatment         y         se   ci_lower  ci_upper ngroup
+#> 1 hom                  -11 0.5282917 0.09643860 -0.6970768 1.7536603      2
+#> 2 hom                  -10 0.4476755 0.05548662  0.2089358 0.6864151      3
+#> 3 hom                   -9 0.4708055 0.02235961  0.4087253 0.5328858      5
+#> 4 hom                   -8 0.4529724 0.02489070  0.3920671 0.5138777      7
+#> 5 hom                   -7 0.4970207 0.03007708  0.4258997 0.5681417      8
+#> 6 hom                   -6 0.4832311 0.02148627  0.4324242 0.5340381      8
 #>   period_length
 #> 1        1 year
 #> 2        1 year

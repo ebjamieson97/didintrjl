@@ -26,8 +26,9 @@ didint(
   verbose = TRUE,
   seed = sample.int(1e+06, 1),
   notyet = NULL,
-  hc = "hc3",
-  truejack = FALSE
+  hc = "hc1",
+  truejack = FALSE,
+  edgecase = FALSE
 )
 }
 \arguments{
@@ -94,6 +95,11 @@ One of \code{"hc0"}, \code{"hc1"}, \code{"hc2"}, \code{"hc3"}, \code{"hc4"}.}
 
 \item{truejack}{Logical value, if \code{TRUE}, re-estimates the DID-INT
 model from the first step (if \code{ccc} option is not \code{"int"} or "\code{state}").}
+
+\item{edgecase}{Logical value, if \code{TRUE} computes any edge case standard
+errors from saturated Step 3 regressions - see the DiDInt.jl documentation
+site (https://ebjamieson97.github.io/DiDInt.jl/stable/) for more details.
+Defaults to \code{FALSE.}}
 }
 \value{
 A DiDIntObj
@@ -103,9 +109,11 @@ A DiDIntObj
 using intersection difference-in-differences developped by Karim & Webb
 (2025). The method adjusts for covariates that may vary across states,
 over time, or jointly by state and time. This function is an R wrapper
-around the Julia implementation provided in the \pkg{Didint.jl} package.
-For all the details visit the didintrjl documentation site:
-https://ebjamieson97.github.io/didintrjl/.
+around the Julia implementation provided in the \pkg{DiDInt.jl} package.
+For more details on the \pkg{didintrjl} wrapper, visit the didintrjl
+documentation site: https://ebjamieson97.github.io/didintrjl/. For more
+details on the backend implementation, see:
+https://ebjamieson97.github.io/DiDInt.jl/stable/
 }
 \details{
 The arguments \code{treated_states} and \code{treatment_times} must be supplied such
@@ -120,13 +128,23 @@ specified via the \code{date_format} argument (e.g. \code{"yyyy-mm-dd"}).
 Period grids for staggered adoption are constructed automatically,
 based on the inputted data. Otherwise, the period grid can be created
 manually using the arguments \code{freq}, \code{freq_multiplier}, \code{start_date},
-and \code{end_date}. More information on this process can be seen on the didintrjl
-documentation site: https://ebjamieson97.github.io/didintrjl/.
+and \code{end_date}. More information on this process can be seen on the DiDInt.jl
+documentation site: https://ebjamieson97.github.io/DiDInt.jl/stable/.
 }
 \examples{
-file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
-df <- utils::read.csv(file_path)
-#didint()
+#' if (JuliaConnectoR::juliaSetupOk() &&
+    JuliaConnectoR::juliaEval('using Pkg; _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies()); !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"') #nolint
+) {
+ file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
+ df <- utils::read.csv(file_path)
+ res <- didint("coll", "state", "year", df, verbose = FALSE,
+               treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88), nperm = 399,
+               treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000)
+ summary(res)
+}
+\dontshow{
+JuliaConnectoR:::stopJulia()
+}
 
 }
 \references{

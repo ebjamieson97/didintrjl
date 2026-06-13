@@ -1,4 +1,5 @@
 test_that("didint_plot parallel test", {
+  skip_if_not(julia_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
   path <- system.file("extdata", "merit.csv", package = "didintrjl")
   df <- read.csv(path)
   df_sub <- df[df$state %in% c(71, 58, 11, 34, 14), ]
@@ -6,10 +7,11 @@ test_that("didint_plot parallel test", {
               treatment_times = c(1991, 1993, 2000),
               covariates = c("asian", "black", "male"))
   expect_equal(!is.null(res_parallel$data), TRUE)
-
+  expect_no_error(plot(res_parallel))
 })
 
 test_that("didint_plot event test", {
+  skip_if_not(julia_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
   path <- system.file("extdata", "merit.csv", package = "didintrjl")
   df <- read.csv(path)
   res_event <- didint_plot("coll", "state", "year", df, event = TRUE,
@@ -17,5 +19,5 @@ test_that("didint_plot event test", {
               treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000),
               covariates = c("asian", "black", "male"))
   expect_equal(!is.null(res_event$data), TRUE)
+  expect_no_error(plot(res_event))
 })
-

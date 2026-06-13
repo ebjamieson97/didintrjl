@@ -11,14 +11,12 @@
   }
 
   # Check that DiDINT exists
-  didint_exists <- JuliaConnectoR::juliaEval('
-                   using Pkg
-                   "DiDInt" in [pkg.name for pkg in values(Pkg.dependencies())]
-                   ')
+  didint_exists <- JuliaConnectoR::juliaEval('using Pkg; _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies()); !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"') #nolint
+
   if (!didint_exists) {
-    stop(paste0("Could not find the DiDInt.jl Julia package. Try running:\n",
+    stop(paste0("Could not find DiDInt.jl >= v0.9.6. Try running:\n",
                 "JuliaConnectoR::juliaEval('using Pkg;\n",
-                "Pkg.add(url=\"https://github.com/ebjamieson97/DiDInt.jl\")')"))
+                "Pkg.add(\"DiDInt\")')"))
   }
 
   # Import DiDInt

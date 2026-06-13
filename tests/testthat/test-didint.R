@@ -1,4 +1,5 @@
 test_that("didint test", {
+  skip_if_not(julia_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
   path <- system.file("extdata", "merit.csv", package = "didintrjl")
   df <- read.csv(path)
   res <- didint("coll", "state", "year", df, verbose = FALSE,
@@ -6,4 +7,6 @@ test_that("didint test", {
                 treatment_times = c(1991, 1993, 1996, 1997, 1997,
                                     1998, 1998, 1999, 2000, 2000))
   expect_equal(coef(res), 0.04582252, tolerance = 1e-6)
+  expect_no_error(summary(res))
+  expect_no_error(print(res))
 })

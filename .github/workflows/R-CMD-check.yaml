@@ -56,7 +56,7 @@ jobs:
       # Install DiDInt.jl package with explicit precompilation
       - name: Install DiDInt.jl
         run: |
-          julia -e 'using Pkg; Pkg.add(url="https://github.com/ebjamieson97/DiDInt.jl"); Pkg.precompile()'
+          julia -e 'using Pkg; Pkg.add("DiDInt"); Pkg.precompile()'
       
       # Let setup-r-dependencies handle R package caching automatically
       - uses: r-lib/actions/setup-r-dependencies@v2

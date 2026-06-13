@@ -1,6 +1,6 @@
 Package: didintrjl
 Title: Intersection Difference-in-Differences
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: 
     person("Eric", "Jamieson", email = "ericbrucejamieson@gmail.com", role = c("aut", "cre", "cph"))
 Description: A wrapper for the Julia package 'DiDInt.jl' <https://ebjamieson97.github.io/DiDInt.jl/dev/>
@@ -15,7 +15,7 @@ Depends: R (>= 3.4.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-SystemRequirements: Julia (>= 1.6), DiDInt.jl
+SystemRequirements: Julia (>= 1.10), DiDInt.jl
 BugReports: https://github.com/ebjamieson97/didintrjl/issues
 Suggests: 
     knitr,
