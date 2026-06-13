@@ -88,7 +88,7 @@
 #'  df <- utils::read.csv(file_path)
 #'  res <- didint("coll", "state", "year", df, verbose = FALSE,
 #'                treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88), nperm = 399,
-#'                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000)
+#'                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
 #'  summary(res)
 #' }
 #' \dontshow{

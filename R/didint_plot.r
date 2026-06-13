@@ -170,6 +170,7 @@ didint_plot <- function(
 #' @importFrom ggplot2 ggplot aes geom_line geom_vline theme element_text margin
 #' @importFrom ggplot2 facet_wrap scale_x_continuous labs theme_bw unit
 #' @importFrom ggplot2 geom_ribbon geom_point element_blank
+#' @importFrom rlang .data
 #' @export
 plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", groupmin = 3,
                                window = NULL, ...) {
@@ -216,10 +217,11 @@ plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", groupmin = 3,
 
     df$se_missing <- is.na(df$se)
     df <- .plot_ccc_check(df, ccc)
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = time_since_treatment, y = y)) +
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = .data$time_since_treatment,
+                                          y = .data$y)) +
       ggplot2::geom_ribbon(
         data = df[!df$se_missing, ],
-        ggplot2::aes(ymin = ci_lower, ymax = ci_upper),
+        ggplot2::aes(ymin = .data$ci_lower, ymax = .data$ci_upper),
         fill = "steelblue",
         alpha = 0.2,
         colour = NA
@@ -236,7 +238,7 @@ plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", groupmin = 3,
       ggplot2::geom_vline(xintercept = 0,
                           linetype = "dotted", color = "black",
                           linewidth = 0.7) +
-      ggplot2::facet_wrap(~ ccc) +
+      ggplot2::facet_wrap(~ .data$ccc) +
       ggplot2::scale_x_continuous(
         breaks = df$time_since_treatment,
         labels = ifelse(abs(df$time_since_treatment) %% 2 == 0,
@@ -273,13 +275,13 @@ plot.DiDIntPlotObj <- function(x, y = NULL, ccc = "all", groupmin = 3,
     df <- .plot_ccc_check(df, ccc)
 
     # Make plot
-    p <- ggplot2::ggplot(df, ggplot2::aes(x = period, y = lambda,
-                                          color = state)) +
+    p <- ggplot2::ggplot(df, ggplot2::aes(x = .data$period, y = .data$lambda,
+                                          color = .data$state)) +
       ggplot2::geom_line(linewidth = 1) +
       ggplot2::geom_vline(xintercept = treat_periods,
                           linetype = "dotted", color = "black",
                           linewidth = 0.7) +
-      ggplot2::facet_wrap(~ ccc) +
+      ggplot2::facet_wrap(~ .data$ccc) +
       ggplot2::scale_x_continuous(
         breaks = df$period,
         labels = ifelse(df$period %% 2 == 0, df$time, "")
