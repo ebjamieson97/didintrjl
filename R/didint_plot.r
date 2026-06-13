@@ -67,9 +67,10 @@
 #' A DiDIntPlotObj.
 #'
 #' @examples
-#' #' if (JuliaConnectoR::juliaSetupOk() &&
-#'     JuliaConnectoR::juliaEval('using Pkg; _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies()); !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"') #nolint
-#' ) {
+#' if (JuliaConnectoR::juliaSetupOk() &&
+#'     JuliaConnectoR::juliaEval('using Pkg;
+#'      _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies());
+#'      !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"')) {
 #'  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
 #'  df <- utils::read.csv(file_path)
 #'  res_event <- didint_plot(
