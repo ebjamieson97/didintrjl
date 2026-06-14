@@ -192,26 +192,41 @@ difference-in-differences with few treated clusters*.
 ## Examples
 
 ``` r
-# The example is capped at 9s elapsed so it exits gracefully on systems
-# where Julia is unavailable; on a machine with Julia + DiDInt.jl a full
-# run may take longer and be cut off — remove setTimeLimit() to run it to
-# completion.
-setTimeLimit(elapsed = 9, transient = TRUE)
-tryCatch({
-if (JuliaConnectoR::juliaSetupOk() &&
-    JuliaConnectoR::juliaEval('using Pkg;
-     _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies());
-     !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"')) {
+if (didintrjl:::julia_ready()) {
  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
  df <- utils::read.csv(file_path)
  res <- didint("coll", "state", "year", df, verbose = FALSE,
                treated_states = c(71, 58, 64, 59, 85, 57, 72, 61, 34, 88), nperm = 399,
                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
  summary(res)
+ DONTSHOW({
+   JuliaConnectoR:::stopJulia()
+ })
 }
-}, error = function(e) invisible(NULL))
 #> Starting Julia ...
 #> Package "Tables.jl" (version >= 1.0) is required. Installing ...
 #> Starting Julia ...
-#> Julia setup check failed: reached elapsed time limit
+#> 
+#>   Model Specification: Two-way DID-INT
+#>   Weighting: both
+#>   Aggregation: cohort
+#>   Period Length: 1 year
+#>   First Period: 1989
+#>   Last Period: 2000
+#>   Permutations: 399
+#> 
+#> Aggregate Results:
+#>         ATT Std. Error     p-value RI p-value Jackknife SE Jackknife p-value
+#>  0.04582252 0.01159691 0.007526681  0.1629073   0.01520398        0.00404305
+#> 
+#> Subaggregate Results:
+#> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
+#> -------------------------------------------------------------------------------------------------------------- 
+#> 1991-01-01               0.0529     0.0221     0.0172     0.4912         NA         NA     0.2018
+#> 1993-01-01               0.0236     0.0166     0.1554     0.7343         NA         NA     0.1915
+#> 1996-01-01               0.0564     0.0242     0.0208     0.4762         NA         NA     0.0757
+#> 1997-01-01               0.0711     0.0230     0.0023     0.1955     0.0257     0.0080     0.3211
+#> 1998-01-01               0.0485     0.0329     0.1427     0.4536     0.0838     0.5650     0.1086
+#> 1999-01-01               0.0120     0.0150     0.4235     0.8822         NA         NA     0.0355
+#> 2000-01-01              -0.0331     0.0320     0.3081     0.7243     0.0966     0.7336     0.0658
 ```
