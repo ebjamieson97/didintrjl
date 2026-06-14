@@ -15,7 +15,7 @@ for different violations of the common causal covaraites (CCC) assumptions."></h
 
     <a class="navbar-brand me-2" href="../index.html">didintrjl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -200,7 +200,13 @@ https://ebjamieson97.github.io/didintrjl/.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">JuliaConnectoR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaSetupOk.html" class="external-link">juliaSetupOk</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># The example is capped at 9s elapsed so it exits gracefully on systems</span></span></span>
+<span class="r-in"><span><span class="co"># where Julia is unavailable; on a machine with Julia + DiDInt.jl a full</span></span></span>
+<span class="r-in"><span><span class="co"># run may take longer and be cut off — remove setTimeLimit() to run it to</span></span></span>
+<span class="r-in"><span><span class="co"># completion.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/setTimeLimit.html" class="external-link">setTimeLimit</a></span><span class="op">(</span>elapsed <span class="op">=</span> <span class="fl">9</span>, transient <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/conditions.html" class="external-link">tryCatch</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">JuliaConnectoR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaSetupOk.html" class="external-link">juliaSetupOk</a></span><span class="op">(</span><span class="op">)</span> <span class="op">&amp;&amp;</span></span></span>
 <span class="r-in"><span>    <span class="fu">JuliaConnectoR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/juliaEval.html" class="external-link">juliaEval</a></span><span class="op">(</span><span class="st">'using Pkg;</span></span></span>
 <span class="r-in"><span><span class="st">     _didint_pkgs = filter(p -&gt; p.second.name == "DiDInt", Pkg.dependencies());</span></span></span>
 <span class="r-in"><span><span class="st">     !isempty(_didint_pkgs) &amp;&amp; first(values(_didint_pkgs)).version &gt;= v"0.9.6"'</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -215,8 +221,8 @@ https://ebjamieson97.github.io/didintrjl/.</p>
 <span class="r-in"><span> <span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_event</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="op">}</span>, error <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">e</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/invisible.html" class="external-link">invisible</a></span><span class="op">(</span><span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia ...</span>
-<span class="r-plt img"><img src="didint_plot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

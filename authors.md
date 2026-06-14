@@ -38,13 +38,13 @@ Econometrics*, **218**(2), 435-450.
     }
 
 Jamieson E (2026). “didintrjl: Intersection difference-in-differences in
-R.” R package version 0.2.3,
+R.” R package version 0.2.4,
 <https://github.com/ebjamieson97/didintrjl>.
 
     @Misc{,
       title = {didintrjl: Intersection difference-in-differences in R},
       author = {Eric Jamieson},
       year = {2026},
-      note = {R package version 0.2.3},
+      note = {R package version 0.2.4},
       url = {https://github.com/ebjamieson97/didintrjl},
     }

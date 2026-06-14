@@ -1,5 +1,14 @@
 # Changelog
 
+## didintrjl 0.2.4
+
+- Wrapped the examples for
+  [`didint()`](https://ebjamieson97.github.io/didintrjl/reference/didint.md)
+  and
+  [`didint_plot()`](https://ebjamieson97.github.io/didintrjl/reference/didint_plot.md)
+  with a [`setTimeLimit()`](https://rdrr.io/r/base/setTimeLimit.html)
+  call in order to ensure a graceful exit on systems without Julia.
+
 ## didintrjl 0.2.3
 
 - Added the `edgecase` option for
