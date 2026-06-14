@@ -1,3 +1,7 @@
+# didintrjl 0.2.4
+
+* Wrapped the examples for `didint()` and `didint_plot()` with a `setTimeLimit()` call in order to ensure a graceful exit on systems without Julia.
+
 # didintrjl 0.2.3
 
 * Added the `edgecase` option for `didint()` to toggle computation of edge case standard errors from saturated Step 3 regressions (see https://ebjamieson97.github.io/DiDInt.jl/stable/details/ for more details). 

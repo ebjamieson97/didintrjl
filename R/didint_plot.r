@@ -67,6 +67,12 @@
 #' A DiDIntPlotObj.
 #'
 #' @examples
+#' # The example is capped at 9s elapsed so it exits gracefully on systems
+#' # where Julia is unavailable; on a machine with Julia + DiDInt.jl a full
+#' # run may take longer and be cut off — remove setTimeLimit() to run it to
+#' # completion.
+#' setTimeLimit(elapsed = 9, transient = TRUE)
+#' tryCatch({
 #' if (JuliaConnectoR::juliaSetupOk() &&
 #'     JuliaConnectoR::juliaEval('using Pkg;
 #'      _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies());
@@ -82,6 +88,7 @@
 #'  )
 #'  plot(res_event)
 #' }
+#' }, error = function(e) invisible(NULL))
 #' \dontshow{
 #' JuliaConnectoR:::stopJulia()
 #' }

@@ -132,6 +132,12 @@ and \code{end_date}. More information on this process can be seen on the DiDInt.
 documentation site: https://ebjamieson97.github.io/DiDInt.jl/stable/.
 }
 \examples{
+# The example is capped at 9s elapsed so it exits gracefully on systems
+# where Julia is unavailable; on a machine with Julia + DiDInt.jl a full
+# run may take longer and be cut off — remove setTimeLimit() to run it to
+# completion.
+setTimeLimit(elapsed = 9, transient = TRUE)
+tryCatch({
 if (JuliaConnectoR::juliaSetupOk() &&
     JuliaConnectoR::juliaEval('using Pkg;
      _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies());
@@ -143,6 +149,7 @@ if (JuliaConnectoR::juliaSetupOk() &&
                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
  summary(res)
 }
+}, error = function(e) invisible(NULL))
 \dontshow{
 JuliaConnectoR:::stopJulia()
 }
