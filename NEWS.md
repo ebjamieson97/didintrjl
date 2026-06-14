@@ -1,3 +1,7 @@
+# didintrjl 0.2.5
+
+* Wrapped the examples for `didint()` and `didint_plot()` in `donttest{}` since there still seems to be an issue on the CRAN check not found on `check_win_devel()`.
+
 # didintrjl 0.2.4
 
 * Wrapped the examples for `didint()` and `didint_plot()` with a `setTimeLimit()` call in order to ensure a graceful exit on systems without Julia.

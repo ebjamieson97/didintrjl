@@ -67,16 +67,7 @@
 #' A DiDIntPlotObj.
 #'
 #' @examples
-#' # The example is capped at 9s elapsed so it exits gracefully on systems
-#' # where Julia is unavailable; on a machine with Julia + DiDInt.jl a full
-#' # run may take longer and be cut off — remove setTimeLimit() to run it to
-#' # completion.
-#' setTimeLimit(elapsed = 9, transient = TRUE)
-#' tryCatch({
-#' if (JuliaConnectoR::juliaSetupOk() &&
-#'     JuliaConnectoR::juliaEval('using Pkg;
-#'      _didint_pkgs = filter(p -> p.second.name == "DiDInt", Pkg.dependencies());
-#'      !isempty(_didint_pkgs) && first(values(_didint_pkgs)).version >= v"0.9.6"')) {
+#' if (didintrjl:::julia_ready()) {
 #'  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
 #'  df <- utils::read.csv(file_path)
 #'  res_event <- didint_plot(
@@ -87,10 +78,9 @@
 #'    covariates = c("asian", "black", "male")
 #'  )
 #'  plot(res_event)
-#' }
-#' }, error = function(e) invisible(NULL))
-#' \dontshow{
-#' JuliaConnectoR:::stopJulia()
+#'  \dontshow{
+#'    JuliaConnectoR:::stopJulia()
+#'  }
 #' }
 #' 
 #' @references

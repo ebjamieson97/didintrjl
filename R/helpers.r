@@ -43,3 +43,13 @@
                                       "Two-way intersection covariates"))
   df
 }
+
+#' @keywords internal
+#' Just checks if didintrjl is ready to go
+julia_ready <- function() {
+  Sys.getenv("NOT_CRAN") == "true" &&
+    JuliaConnectoR::juliaSetupOk() &&
+    JuliaConnectoR::juliaEval('using Pkg;
+     _p = filter(p -> p.second.name == "DiDInt", Pkg.dependencies());
+     !isempty(_p) && first(values(_p)).version >= v"0.9.6"')
+}
