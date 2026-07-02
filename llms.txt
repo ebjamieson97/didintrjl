@@ -233,6 +233,9 @@ head(res_event$data)
 - [`didint_plot()`](https://ebjamieson97.github.io/didintrjl/reference/didint_plot.md)
   : Make event study or parallel trends plots
 
+- [`didintrjl_ready()`](https://ebjamieson97.github.io/didintrjl/reference/didintrjl_ready.md)
+  : Check if didintrjl is ready to go
+
 - [`plot(`*`<DiDIntPlotObj>`*`)`](https://ebjamieson97.github.io/didintrjl/reference/plot.DiDIntPlotObj.md)
   :
 

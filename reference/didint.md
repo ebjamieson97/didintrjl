@@ -160,7 +160,13 @@ didint(
 
 ## Value
 
-A DiDIntObj
+An object of class `DiDIntObj`, a list containing the aggregate results,
+sub-aggregate results, and model specifications. Has associated
+[`print.DiDIntObj`](https://ebjamieson97.github.io/didintrjl/reference/print.DiDIntObj.md),
+[`summary.DiDIntObj`](https://ebjamieson97.github.io/didintrjl/reference/summary.DiDIntObj.md),
+and
+[`coef.DiDIntObj`](https://ebjamieson97.github.io/didintrjl/reference/coef.DiDIntObj.md)
+methods.
 
 ## Details
 
@@ -192,7 +198,7 @@ difference-in-differences with few treated clusters*.
 ## Examples
 
 ``` r
-if (didintrjl:::julia_ready()) {
+if (Sys.getenv("NOT_CRAN") == "true" && didintrjl_ready()) {
  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
  df <- utils::read.csv(file_path)
  res <- didint("coll", "state", "year", df, verbose = FALSE,
@@ -200,7 +206,7 @@ if (didintrjl:::julia_ready()) {
                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
  summary(res)
  DONTSHOW({
-   JuliaConnectoR:::stopJulia()
+   JuliaConnectoR::stopJulia()
  })
 }
 #> Starting Julia ...

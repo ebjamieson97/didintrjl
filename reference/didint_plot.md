@@ -130,7 +130,11 @@ didint_plot(
 
 ## Value
 
-A DiDIntPlotObj.
+An object of class `DiDIntPlotObj`, a list containing the parallel
+trends data or event study data (if `event` is set to `TRUE`) and the
+name of the outcome variable. Has an associated
+[`plot.DiDIntPlotObj`](https://ebjamieson97.github.io/didintrjl/reference/plot.DiDIntPlotObj.md)
+method for producing event study or parallel trends plots.
 
 ## Details
 
@@ -157,7 +161,7 @@ with Covariates*. <https://arxiv.org/abs/2412.14447>
 ## Examples
 
 ``` r
-if (didintrjl:::julia_ready()) {
+if (Sys.getenv("NOT_CRAN") == "true" && didintrjl_ready()) {
  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
  df <- utils::read.csv(file_path)
  res_event <- didint_plot(
@@ -169,7 +173,7 @@ if (didintrjl:::julia_ready()) {
  )
  plot(res_event)
  DONTSHOW({
-   JuliaConnectoR:::stopJulia()
+   JuliaConnectoR::stopJulia()
  })
 }
 #> Starting Julia ...

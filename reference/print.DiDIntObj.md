@@ -23,3 +23,8 @@ print(x, level = c("agg", "sub"), ...)
 - ...:
 
   other arguments
+
+## Value
+
+The `DiDIntObj` object, returned invisibly. Called for its side effect
+of printing results to the console.

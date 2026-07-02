@@ -39,3 +39,8 @@ plot(x, y = NULL, ccc = "all", groupmin = 3, window = NULL, ...)
 - ...:
 
   other arguments
+
+## Value
+
+A `ggplot` object showing either the event study plot or the parallel
+trends plot.

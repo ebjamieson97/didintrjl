@@ -24,3 +24,8 @@ summary(object, level = c("all", "agg", "sub"), ...)
 - ...:
 
   other arguments
+
+## Value
+
+The `DiDIntObj` object, returned invisibly. Called for its side effect
+of printing summary results to the console.

@@ -15,7 +15,7 @@ for different violations of the common causal covaraites (CCC) assumptions."></h
 
     <a class="navbar-brand me-2" href="../index.html">didintrjl</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -174,7 +174,11 @@ One of <code>"hc0"</code>, <code>"hc1"</code>, <code>"hc2"</code>, <code>"hc3"</
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A DiDIntPlotObj.</p>
+    <p>An object of class <code>DiDIntPlotObj</code>, a list containing the
+parallel trends data or event study data (if <code>event</code> is set to <code>TRUE</code>)
+and the name of the outcome variable. Has an associated
+<code><a href="plot.DiDIntPlotObj.html">plot.DiDIntPlotObj</a></code> method for producing event study
+or parallel trends plots.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -200,7 +204,7 @@ https://ebjamieson97.github.io/didintrjl/.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">didintrjl</span><span class="fu">:::</span><span class="fu">julia_ready</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"NOT_CRAN"</span><span class="op">)</span> <span class="op">==</span> <span class="st">"true"</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="didintrjl_ready.html">didintrjl_ready</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span> <span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"merit.csv"</span>, package <span class="op">=</span> <span class="st">"didintrjl"</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="va">res_event</span> <span class="op">&lt;-</span> <span class="fu">didint_plot</span><span class="op">(</span></span></span>
@@ -212,7 +216,7 @@ https://ebjamieson97.github.io/didintrjl/.</p>
 <span class="r-in"><span> <span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">res_event</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="fu">DONTSHOW</span><span class="op">(</span><span class="op">{</span></span></span>
-<span class="r-in"><span>   <span class="fu">JuliaConnectoR</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/stopJulia.html" class="external-link">stopJulia</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>   <span class="fu">JuliaConnectoR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/JuliaConnectoR/man/stopJulia.html" class="external-link">stopJulia</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span> <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Starting Julia ...</span>
