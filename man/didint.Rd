@@ -102,7 +102,11 @@ site (https://ebjamieson97.github.io/DiDInt.jl/stable/) for more details.
 Defaults to \code{FALSE.}}
 }
 \value{
-A DiDIntObj
+An object of class \code{DiDIntObj}, a list containing the aggregate
+results, sub-aggregate results, and
+model specifications. Has associated
+\code{\link{print.DiDIntObj}}, \code{\link{summary.DiDIntObj}}, and
+\code{\link{coef.DiDIntObj}} methods.
 }
 \description{
 \code{didint()} estimates the average effect of treatment on the treated (ATT)
@@ -132,7 +136,7 @@ and \code{end_date}. More information on this process can be seen on the DiDInt.
 documentation site: https://ebjamieson97.github.io/DiDInt.jl/stable/.
 }
 \examples{
-if (didintrjl:::julia_ready()) {
+if (Sys.getenv("NOT_CRAN") == "true" && didintrjl_ready()) {
  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
  df <- utils::read.csv(file_path)
  res <- didint("coll", "state", "year", df, verbose = FALSE,
@@ -140,7 +144,7 @@ if (didintrjl:::julia_ready()) {
                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
  summary(res)
  \dontshow{
-   JuliaConnectoR:::stopJulia()
+   JuliaConnectoR::stopJulia()
  }
 }
 

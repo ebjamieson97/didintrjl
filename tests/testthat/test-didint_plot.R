@@ -1,5 +1,5 @@
 test_that("didint_plot parallel test", {
-  skip_if_not(julia_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
+  skip_if_not(didintrjl_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
   path <- system.file("extdata", "merit.csv", package = "didintrjl")
   df <- read.csv(path)
   df_sub <- df[df$state %in% c(71, 58, 11, 34, 14), ]
@@ -11,7 +11,7 @@ test_that("didint_plot parallel test", {
 })
 
 test_that("didint_plot event test", {
-  skip_if_not(julia_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
+  skip_if_not(didintrjl_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
   path <- system.file("extdata", "merit.csv", package = "didintrjl")
   df <- read.csv(path)
   res_event <- didint_plot("coll", "state", "year", df, event = TRUE,

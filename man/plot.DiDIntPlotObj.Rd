@@ -24,6 +24,10 @@ and last period that should be plotted.}
 
 \item{...}{other arguments}
 }
+\value{
+A \code{ggplot} object showing either the event study plot or the
+parallel trends plot.
+}
 \description{
 Plot method for \code{DiDIntPlotObj}
 }

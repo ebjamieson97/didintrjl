@@ -77,10 +77,14 @@
 #'  Defaults to `FALSE.`
 #'
 #' @returns
-#' A DiDIntObj
+#' An object of class \code{DiDIntObj}, a list containing the aggregate
+#' results, sub-aggregate results, and
+#' model specifications. Has associated
+#' \code{\link{print.DiDIntObj}}, \code{\link{summary.DiDIntObj}}, and
+#' \code{\link{coef.DiDIntObj}} methods.
 #'
 #' @examples
-#' if (didintrjl:::julia_ready()) {
+#' if (Sys.getenv("NOT_CRAN") == "true" && didintrjl_ready()) {
 #'  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
 #'  df <- utils::read.csv(file_path)
 #'  res <- didint("coll", "state", "year", df, verbose = FALSE,
@@ -88,7 +92,7 @@
 #'                treatment_times = c(1991, 1993, 1996, 1997, 1997, 1998, 1998, 1999, 2000, 2000))
 #'  summary(res)
 #'  \dontshow{
-#'    JuliaConnectoR:::stopJulia()
+#'    JuliaConnectoR::stopJulia()
 #'  }
 #' }
 #' 
@@ -302,6 +306,8 @@ create_didint_object <- function(result, ccc, weighting, agg) {
 #' @param level Specify either `"agg"` or `"sub"` to view the aggregate
 #'   or sub-aggregate results.
 #' @param ... other arguments
+#' @return The \code{DiDIntObj} object, returned invisibly. Called
+#'   for its side effect of printing results to the console.
 #' @export
 print.DiDIntObj <- function(x, level = c("agg", "sub"), ...) {
   level <- match.arg(level)
@@ -347,6 +353,8 @@ print.DiDIntObj <- function(x, level = c("agg", "sub"), ...) {
 #'   results at the aggregate level, the sub-aggregate level, or to view
 #'   both simultaneously.
 #' @param ... other arguments
+#' @return The \code{DiDIntObj} object, returned invisibly. Called
+#'   for its side effect of printing summary results to the console.
 #' @export
 summary.DiDIntObj <- function(object, level  = c("all", "agg", "sub"), ...) {
 

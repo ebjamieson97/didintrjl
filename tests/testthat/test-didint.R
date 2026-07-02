@@ -1,5 +1,5 @@
 test_that("didint test", {
-  skip_if_not(julia_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
+  skip_if_not(didintrjl_ready(), "Julia, JuliaConnectoR or DiDInt.jl >=0.9.6 not available")
   path <- system.file("extdata", "merit.csv", package = "didintrjl")
   df <- read.csv(path)
   res <- didint("coll", "state", "year", df, verbose = FALSE,

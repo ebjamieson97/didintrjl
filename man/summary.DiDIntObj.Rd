@@ -15,6 +15,10 @@ both simultaneously.}
 
 \item{...}{other arguments}
 }
+\value{
+The \code{DiDIntObj} object, returned invisibly. Called
+for its side effect of printing summary results to the console.
+}
 \description{
 Summary method for \code{DiDIntObj}
 }

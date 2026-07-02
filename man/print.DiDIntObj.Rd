@@ -14,6 +14,10 @@ or sub-aggregate results.}
 
 \item{...}{other arguments}
 }
+\value{
+The \code{DiDIntObj} object, returned invisibly. Called
+for its side effect of printing results to the console.
+}
 \description{
 Print method for \code{DiDIntObj}
 }

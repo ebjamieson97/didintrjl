@@ -83,7 +83,11 @@ adoption. One of \code{"year"}, \code{"month"}, \code{"week"}, \code{"day"}.}
 One of \code{"hc0"}, \code{"hc1"}, \code{"hc2"}, \code{"hc3"}, \code{"hc4"}.}
 }
 \value{
-A DiDIntPlotObj.
+An object of class \code{DiDIntPlotObj}, a list containing the
+parallel trends data or event study data (if \code{event} is set to \code{TRUE})
+and the name of the outcome variable. Has an associated
+\code{\link{plot.DiDIntPlotObj}} method for producing event study
+or parallel trends plots.
 }
 \description{
 \code{didint_plot()} produces either event study plots or parallel trends plots
@@ -109,7 +113,7 @@ on this process can be seen on the didintrjl documentation site:
 https://ebjamieson97.github.io/didintrjl/.
 }
 \examples{
-if (didintrjl:::julia_ready()) {
+if (Sys.getenv("NOT_CRAN") == "true" && didintrjl_ready()) {
  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
  df <- utils::read.csv(file_path)
  res_event <- didint_plot(
@@ -121,7 +125,7 @@ if (didintrjl:::julia_ready()) {
  )
  plot(res_event)
  \dontshow{
-   JuliaConnectoR:::stopJulia()
+   JuliaConnectoR::stopJulia()
  }
 }
 

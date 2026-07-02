@@ -64,10 +64,14 @@
 #' @param end_date Optional latest date to retain in the data.
 #'
 #' @returns
-#' A DiDIntPlotObj.
+#' An object of class \code{DiDIntPlotObj}, a list containing the
+#' parallel trends data or event study data (if `event` is set to `TRUE`)
+#' and the name of the outcome variable. Has an associated
+#' \code{\link{plot.DiDIntPlotObj}} method for producing event study
+#' or parallel trends plots.
 #'
 #' @examples
-#' if (didintrjl:::julia_ready()) {
+#' if (Sys.getenv("NOT_CRAN") == "true" && didintrjl_ready()) {
 #'  file_path <- system.file("extdata", "merit.csv", package = "didintrjl")
 #'  df <- utils::read.csv(file_path)
 #'  res_event <- didint_plot(
@@ -79,10 +83,10 @@
 #'  )
 #'  plot(res_event)
 #'  \dontshow{
-#'    JuliaConnectoR:::stopJulia()
+#'    JuliaConnectoR::stopJulia()
 #'  }
 #' }
-#' 
+#'
 #' @references
 #' Karim & Webb (2025).
 #' *Good Controls Gone Bad: Difference-in-Differences with Covariates*.
@@ -164,6 +168,8 @@ didint_plot <- function(
 #' @param window Either `NULL` or a vector with two elements defining the first
 #'   and last period that should be plotted.
 #' @param ... other arguments
+#' @return A \code{ggplot} object showing either the event study plot or the
+#'   parallel trends plot.
 #' @importFrom ggplot2 ggplot aes geom_line geom_vline theme element_text margin
 #' @importFrom ggplot2 facet_wrap scale_x_continuous labs theme_bw unit
 #' @importFrom ggplot2 geom_ribbon geom_point element_blank
